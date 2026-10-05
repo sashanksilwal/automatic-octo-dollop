@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-05",
+  "kind": "physical wireless stream",
+  "topology": {
+    "glasses": "INMO AIR2, Android 9, 172.20.10.3:8080",
+    "phone": "Pixel 5, Android 11, 172.20.10.2:8081",
+    "laptop": "Mac, 172.20.10.4, localhost dashboard port 8000",
+    "network": "IPhone-sashank, 5745 MHz Wi-Fi",
+    "usb_video_forwarding": false
+  },
+  "requested_camera": {
+    "id": 0,
+    "fps": 8,
+    "jpeg_quality": 65,
+    "rotation": 0
+  },
+  "source_session": "6739684d-ca9c-4dc3-8226-8e7c3e4f8b5e",
+  "resolution": [
+    640,
+    480
+  ],
+  "duration_seconds": 128.352,
+  "laptop_frames": 961,
+  "receive_fps": 7.479,
+  "maximum_interarrival_ms": 164.042,
+  "duplicate_frame_keys": 0,
+  "missing_sequence_numbers": 0,
+  "laptop_reconnects": 0,
+  "missing_frame_keys_in_upstream_traces": {
+    "glasses": 0,
+    "phone": 0
+  },
+  "metadata_mismatches": {
+    "glasses": 0,
+    "phone": 0
+  },
+  "laptop_frames_with_phone_display_events": 961,
+  "browser_live_view_visually_verified": true,
+  "limitations": [
+    "Device clocks were not calibrated; these are receive statistics, not camera-to-display latency.",
+    "Recovery and longer warm-device tests remain pending.",
+    "This is local hotspot traffic, not a cellular WAN measurement."
+  ]
+}

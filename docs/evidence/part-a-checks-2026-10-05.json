@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-05",
+  "command": "./tools/check.sh",
+  "exit_code": 0,
+  "java_tests": {
+    "edu.purdue.cs536.stream.StreamingTest": {
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "android_lint_issues": {
+    "glasses-app": 0,
+    "android-app": 0
+  },
+  "python_integration_tests": {
+    "tests": 10,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "elapsed_seconds": 12.891
+  },
+  "apks": {
+    "cs536-glasses-debug.apk": {
+      "sha256": "527057577665c5d37bfbb93bf1b33db387bee270d4dbf4595a51d8e661e2c951",
+      "bytes": 40989
+    },
+    "cs536-phone-debug.apk": {
+      "sha256": "3265077c2629740ce32ea4a51af0096a79b3548e810fe6a7d89498fa78446f90",
+      "bytes": 35803
+    }
+  }
+}

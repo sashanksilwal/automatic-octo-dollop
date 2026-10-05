@@ -1,0 +1,12 @@
+.DS_Store
+.tools/
+.gradle/
+.gradle-user/
+**/build/
+local.properties
+*.iml
+.idea/
+__pycache__/
+.venv/
+data/raw/
+output/

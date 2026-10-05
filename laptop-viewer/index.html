@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CS536 · Live glasses stream</title>
+<style>
+:root {
+  color-scheme: light;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #fff;
+  color: #000;
+}
+* { box-sizing: border-box; }
+body { margin: 0; padding: 40px 24px; }
+main { max-width: 960px; margin: 0 auto; }
+header { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+h1 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -.03em; }
+#state { font-size: 13px; text-align: right; overflow-wrap: anywhere; }
+.route { margin: 10px 0 24px; font-size: 13px; line-height: 1.5; }
+.stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  max-height: 66vh;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+}
+canvas { display: block; width: 100%; height: 100%; object-fit: contain; }
+#empty { position: absolute; padding: 20px; font-size: 14px; text-align: center; }
+.stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 0; padding: 22px 0; border-bottom: 1px solid #000; }
+dt { margin-bottom: 8px; font-size: 12px; }
+dd { margin: 0; font-size: 20px; font-weight: 500; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+footer { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 20px; }
+#session { margin: 0; font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+button { flex-shrink: 0; min-height: 44px; padding: 10px 16px; border: 1px solid #000; border-radius: 0; background: #fff; color: #000; font: inherit; font-size: 13px; cursor: pointer; }
+button:hover { background: #000; color: #fff; }
+button:focus-visible { outline: 2px solid #000; outline-offset: 4px; }
+#error { font-size: 13px; line-height: 1.5; overflow-wrap: anywhere; }
+#error:empty { display: none; }
+.note { margin: 20px 0 0; font-size: 12px; line-height: 1.6; }
+.stage:fullscreen { width: 100%; height: 100%; max-height: none; }
+@media (max-width: 600px) {
+  body { padding: 24px 16px; }
+  header { align-items: flex-start; flex-direction: column; gap: 8px; }
+  h1 { font-size: 22px; }
+  #state { text-align: left; }
+  .route { margin-bottom: 20px; }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  footer { align-items: flex-start; flex-direction: column; gap: 14px; }
+}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Live stream</h1>
+    <div id="state" role="status">Connecting</div>
+  </header>
+  <p class="route">Glasses → Phone → Laptop</p>
+  <div class="stage">
+    <canvas id="video" aria-label="Live camera stream"></canvas>
+    <div id="empty">Waiting for video</div>
+  </div>
+  <dl class="stats" aria-label="Stream statistics">
+    <div><dt>Frames</dt><dd id="frames">0</dd></div>
+    <div><dt>Frame rate</dt><dd id="fps">—</dd></div>
+    <div><dt>Data rate</dt><dd id="rate">—</dd></div>
+    <div><dt>Frame age</dt><dd id="age">—</dd></div>
+  </dl>
+  <footer>
+    <p id="session">Waiting for source</p>
+    <button id="fullscreen" type="button">Full screen</button>
+  </footer>
+  <p id="error" role="alert"></p>
+  <p class="note">Frame age measures time since the last frame reached this laptop.</p>
+</main>
+<script>
+const canvas=document.querySelector('#video'),ctx=canvas.getContext('2d'),empty=document.querySelector('#empty');
+let previous=null,lastKey='';
+const set=(id,value)=>document.getElementById(id).textContent=value;
+async function draw(){
+ try{
+  const response=await fetch('/frame',{cache:'no-store',signal:AbortSignal.timeout(3000)});
+  if(response.status===204){empty.hidden=false;ctx.clearRect(0,0,canvas.width,canvas.height);lastKey='';}
+  else if(response.ok){
+   const key=response.headers.get('X-Frame-Key');
+   if(key!==lastKey){const bitmap=await createImageBitmap(await response.blob());canvas.width=bitmap.width;canvas.height=bitmap.height;ctx.drawImage(bitmap,0,0);bitmap.close();lastKey=key;}
+   empty.hidden=true;
+  }else throw Error('Frame unavailable');
+ }catch(e){empty.hidden=false;ctx.clearRect(0,0,canvas.width,canvas.height);lastKey='';}
+ setTimeout(draw,100);
+}
+async function status(){
+ try{
+  const response=await fetch('/status',{cache:'no-store',signal:AbortSignal.timeout(3000)});
+  if(!response.ok)throw Error('Status unavailable');
+  const s=await response.json(),now=performance.now();
+  set('state',s.state);set('frames',s.frames.toLocaleString());set('age',s.frame_age_ms<0?'—':s.frame_age_ms+' ms');
+  if(previous){const sec=(now-previous.time)/1000;set('fps',Math.max(0,(s.frames-previous.frames)/sec).toFixed(1)+' fps');set('rate',Math.max(0,(s.jpeg_bytes-previous.bytes)*8/sec/1e6).toFixed(2)+' Mbps');}
+  previous={time:now,frames:s.frames,bytes:s.jpeg_bytes};
+  set('session',s.source_session?'Source '+s.source_session.slice(0,8)+' · frame '+s.sequence:'Waiting for source');
+  set('error',s.log_error||'');
+ }catch(e){set('state','Viewer unavailable');}
+ setTimeout(status,1000);
+}
+document.querySelector('#fullscreen').onclick=()=>document.querySelector('.stage').requestFullscreen().catch(()=>{});
+draw();status();
+</script>
+</body>
+</html>
