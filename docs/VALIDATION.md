@@ -35,11 +35,29 @@
 
 The machine-readable endurance result and CSV are under `output/verification/`. APKs are under `output/apk/`. Build/lint reports and test results are generated inside the corresponding module's `build/` directory. Reproduce with `tools/check.sh`, `tools/build.sh`, and `tools/soak_test.py`.
 
+## Physical recovery checks - October 7, 2026
+
+- Both devices were reconnected over USB for controls and charging; video continued over the Wi-Fi relay path.
+- Pause/resume passed on glasses and phone. Stopping the phone cleared laptop video; restarting restored it.
+- Disabling glasses Wi-Fi cleared stale video. Re-enabling it restored streaming in 7.599 seconds without restarting the laptop viewer.
+- Both stream servers rejected an incorrect pairing code with HTTP 401 and accepted the saved code with HTTP 200.
+- Backgrounding either app cleared laptop video. Phone foreground restart recovered in 26.836 seconds.
+- Camera permission was temporarily revoked and then restored for recording. The denial interaction and recovery test remains unverified.
+- Detailed results are in [`evidence/part-a-recovery-2026-10-07.json`](evidence/part-a-recovery-2026-10-07.json).
+
+## Recorded demonstration - October 7, 2026
+
+- Saved and fully decoded both MP4s without errors: laptop-received video is 90.00 seconds; phone screen is 90.12 seconds. These are separate clips with partial overlap, without audio.
+- All 90 once-per-second laptop status samples reported streaming, with one source session, 666 frames received between the first and last samples, and maximum sampled frame age 132 ms. Frame age is not end-to-end latency.
+- Laptop recording samples the received JPEG at 8 fps; encoded frame rate does not measure camera throughput.
+- Checksums and results: [`evidence/part-a-demo-2026-10-07.json`](evidence/part-a-demo-2026-10-07.json). Local clips are under `output/verification/hardware-2026-10-07/` and included in `output/Bonus-PartA.zip`.
+- Both Android applications were stopped after recording at the user's request.
+
 ## Still pending
 
-- Longer warm-device runs, physical touchpad/ring usability, rotation/focus checks, denied-permission recovery, and controlled pause/disconnection tests.
+- Longer warm-device runs, physical touchpad/ring usability, rotation/focus checks, and denied-permission recovery.
 - AIR3 compatibility has not been tested; current physical results apply to AIR2 and Pixel 5.
 - PAL3.0 reachability and any cellular experiment topology.
 - Physical display timing and clock calibration for latency claims.
 
-This is a Part A implementation checkpoint, not a claim that the required in-class demonstration has occurred. Controlled hardware recovery tests and a recorded demo remain pending, and no `BONUS-PartA` release tag has been created. Use `HARDWARE_CHECKLIST.md` to record the remaining acceptance evidence.
+This is a Part A implementation checkpoint, not a claim that the required in-class demonstration has occurred. Controlled hardware recovery checks are documented above; the `BONUS-PartA` tag identifies this submission snapshot. Use `HARDWARE_CHECKLIST.md` to record the remaining acceptance evidence.

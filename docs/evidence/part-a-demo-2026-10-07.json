@@ -1,0 +1,23 @@
+{
+  "recordings": [
+    {
+      "file": "part-a-laptop-demo.mp4",
+      "decode_exit": 0,
+      "duration": "Duration: 00:01:30.00, start: 0.000000, bitrate: 1632 kb/s",
+      "sha256": "895e477a83e7f84035c416f476a712c6e58af0c42bbd283e671f8f55a622393f"
+    },
+    {
+      "file": "part-a-phone-90s.mp4",
+      "decode_exit": 0,
+      "duration": "Duration: 00:01:30.12, start: 0.000000, bitrate: 1999 kb/s",
+      "sha256": "627c5168307318bb7d899364dc0eca5a29cd9726f292479a86038d1f5b8aade2"
+    }
+  ],
+  "samples": 90,
+  "all_samples_streaming": true,
+  "source_sessions": 1,
+  "frames_received_between_samples": 666,
+  "max_frame_age_ms": 132,
+  "date": "2026-10-07",
+  "method": "Laptop recording samples the received JPEG at 8 fps; this recording rate is not the measured source rate. Phone recording uses Android screenrecord. Clips were recorded separately with partial overlap."
+}

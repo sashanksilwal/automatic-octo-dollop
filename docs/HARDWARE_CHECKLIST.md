@@ -23,13 +23,21 @@ Record the glasses model/firmware, phone model/Android version, app version, net
 - [x] Laptop receives from the phone relay, not from the glasses or a simulated source.
 - [x] Display live camera video on phone and laptop and retain a continuous run longer than 90 seconds: 128.352 seconds, 961 frames, 7.479 fps, no missing sequence numbers or laptop reconnects. All three CSV snapshots are under `output/verification/hardware-2026-10-05/`.
 - [ ] Prefer three five-minute runs to check repeated operation and warm-device behavior. This is an internal target, beyond the handout's >1-minute tip.
-- [ ] Stop the phone relay and confirm the laptop loses fresh video, demonstrating that the phone is actually in the path.
-- [ ] Pause/resume the glasses and phone separately; verify fresh video returns and old source callbacks do not resurrect a paused session.
-- [ ] Interrupt and restore the glasses-to-phone link; verify automatic reconnect without restarting the laptop viewer.
-- [ ] Try an incorrect pairing code and verify rejection; correct it and reconnect.
+- [x] Stop the phone relay and confirm the laptop loses fresh video, demonstrating that the phone is actually in the path.
+- [x] Pause/resume the glasses and phone separately; verify fresh video returns and old source callbacks do not resurrect a paused session.
+- [x] Interrupt and restore the glasses-to-phone link; verify automatic reconnect without restarting the laptop viewer.
+- [x] Try an incorrect pairing code and verify rejection; correct it and reconnect.
 - [x] Verify no USB video forwarding is active for the wireless demonstration.
 - [x] Export traces, verify all CSV rows parse, and match source sessions/frame IDs across the devices. All 961 sampled laptop frames matched both upstream traces and had phone display events.
 
+## October 7 recovery and recording results
+
+Pause/resume, relay stop/restart, Wi-Fi recovery and authentication checks passed. Backgrounding each app cleared the laptop video; restarting the phone recovered in 26.836 seconds. Permission was restored and glasses capture restarted for recording, but the denied-permission interaction was not validated. See `docs/evidence/part-a-recovery-2026-10-07.json`.
+
+- [x] Record and decode-check the phone screen (90.12 seconds) and laptop-received video (90.00 seconds).
+- [x] All 90 once-per-second laptop status samples reported streaming in one source session; 666 frames arrived between the first and last samples.
+- [ ] Perform the required in-class demonstration.
+
 ## Completion record
 
-Write actual observations, durations, failures, and fixes here or in a dated test report. Complete the README with any device-specific setup changes. Only after the physical demo works should the private repository receive the `BONUS-PartA` tag. No tag or grading claim is implied by this unchecked list.
+Write actual observations, durations, failures, and fixes here or in a dated test report. Complete the README with any device-specific setup changes. Only after the physical demo works should the private repository receive the `BONUS-PartA` tag. The `BONUS-PartA` tag identifies the verified implementation and recorded demonstration; it does not claim that the in-class demonstration or every optional check above has occurred.

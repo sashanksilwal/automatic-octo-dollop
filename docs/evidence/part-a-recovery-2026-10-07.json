@@ -1,0 +1,255 @@
+{
+  "date": "2026-10-07",
+  "devices": [
+    "INMO AIR2",
+    "Pixel 5"
+  ],
+  "tests": [
+    {
+      "test": "baseline",
+      "unix_ms": 1791382776809,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "streaming",
+        "frames": 790,
+        "jpeg_bytes": 17605113,
+        "duplicates": 0,
+        "frame_age_ms": 132,
+        "uptime_ms": 150629,
+        "source_session": "a3f2c8b2-c139-4d1a-9212-992114a19a1c",
+        "sequence": 1141,
+        "log_error": ""
+      },
+      "recovery_seconds": 0.517
+    },
+    {
+      "test": "glasses_pause",
+      "unix_ms": 1791382781290,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "connecting",
+        "frames": 796,
+        "jpeg_bytes": 17730299,
+        "duplicates": 0,
+        "frame_age_ms": 3822,
+        "uptime_ms": 155111,
+        "source_session": "a3f2c8b2-c139-4d1a-9212-992114a19a1c",
+        "sequence": 1147,
+        "log_error": ""
+      },
+      "frame_http_status": 204,
+      "clear_seconds": 3.738
+    },
+    {
+      "test": "glasses_resume",
+      "unix_ms": 1791382782720,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "streaming",
+        "frames": 801,
+        "jpeg_bytes": 17835010,
+        "duplicates": 0,
+        "frame_age_ms": 51,
+        "uptime_ms": 156541,
+        "source_session": "41ed8ec8-24a8-4a34-8366-d9045a55292b",
+        "sequence": 4,
+        "log_error": ""
+      },
+      "recovery_seconds": 1.016
+    },
+    {
+      "test": "phone_pause",
+      "unix_ms": 1791382786577,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "connecting",
+        "frames": 802,
+        "jpeg_bytes": 17856031,
+        "duplicates": 0,
+        "frame_age_ms": 3783,
+        "uptime_ms": 160398,
+        "source_session": "41ed8ec8-24a8-4a34-8366-d9045a55292b",
+        "sequence": 5,
+        "log_error": ""
+      },
+      "frame_http_status": 204,
+      "clear_seconds": 3.235
+    },
+    {
+      "test": "phone_resume",
+      "unix_ms": 1791382787717,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "streaming",
+        "frames": 809,
+        "jpeg_bytes": 18001947,
+        "duplicates": 0,
+        "frame_age_ms": 73,
+        "uptime_ms": 161537,
+        "source_session": "41ed8ec8-24a8-4a34-8366-d9045a55292b",
+        "sequence": 41,
+        "log_error": ""
+      },
+      "recovery_seconds": 0.509
+    },
+    {
+      "test": "phone_stop_removes_laptop_video",
+      "unix_ms": 1791382789525,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "reconnecting (ConnectionRefusedError)",
+        "frames": 810,
+        "jpeg_bytes": 18022858,
+        "duplicates": 0,
+        "frame_age_ms": 1746,
+        "uptime_ms": 163345,
+        "source_session": "41ed8ec8-24a8-4a34-8366-d9045a55292b",
+        "sequence": 42,
+        "log_error": ""
+      },
+      "frame_http_status": 204,
+      "clear_seconds": 1.21
+    },
+    {
+      "test": "phone_restart",
+      "unix_ms": 1791382791161,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "streaming",
+        "frames": 815,
+        "jpeg_bytes": 18127187,
+        "duplicates": 0,
+        "frame_age_ms": 47,
+        "uptime_ms": 164981,
+        "source_session": "41ed8ec8-24a8-4a34-8366-d9045a55292b",
+        "sequence": 67,
+        "log_error": ""
+      },
+      "recovery_seconds": 1.015
+    },
+    {
+      "test": "glasses_wifi_disconnected",
+      "unix_ms": 1791382795599,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "connecting",
+        "frames": 820,
+        "jpeg_bytes": 18231690,
+        "duplicates": 0,
+        "frame_age_ms": 3828,
+        "uptime_ms": 169419,
+        "source_session": "41ed8ec8-24a8-4a34-8366-d9045a55292b",
+        "sequence": 72,
+        "log_error": ""
+      },
+      "frame_http_status": 204,
+      "clear_seconds": 3.747
+    },
+    {
+      "test": "glasses_wifi_reconnected",
+      "unix_ms": 1791382803872,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "streaming",
+        "frames": 822,
+        "jpeg_bytes": 18273053,
+        "duplicates": 0,
+        "frame_age_ms": 19,
+        "uptime_ms": 177693,
+        "source_session": "41ed8ec8-24a8-4a34-8366-d9045a55292b",
+        "sequence": 162,
+        "log_error": ""
+      },
+      "recovery_seconds": 7.599
+    },
+    {
+      "test": "complete",
+      "unix_ms": 1791382803873,
+      "passed": true
+    },
+    {
+      "test": "glasses_authentication",
+      "unix_ms": 1791382869896,
+      "passed": true,
+      "incorrect_code_http": 401,
+      "correct_code_http": 200
+    },
+    {
+      "test": "phone_authentication",
+      "unix_ms": 1791382869991,
+      "passed": true,
+      "incorrect_code_http": 401,
+      "correct_code_http": 200
+    },
+    {
+      "test": "phone_background",
+      "unix_ms": 1791382872308,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "reconnecting (ConnectionRefusedError)",
+        "frames": 1323,
+        "jpeg_bytes": 27871579,
+        "duplicates": 0,
+        "frame_age_ms": 1422,
+        "uptime_ms": 246129,
+        "source_session": "41ed8ec8-24a8-4a34-8366-d9045a55292b",
+        "sequence": 663,
+        "log_error": ""
+      },
+      "frame_http_status": 204,
+      "clear_seconds": 1.715
+    },
+    {
+      "test": "phone_foreground_restart",
+      "unix_ms": 1791382899820,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "streaming",
+        "frames": 1327,
+        "jpeg_bytes": 27944525,
+        "duplicates": 0,
+        "frame_age_ms": 26,
+        "uptime_ms": 273642,
+        "source_session": "41ed8ec8-24a8-4a34-8366-d9045a55292b",
+        "sequence": 879,
+        "log_error": ""
+      },
+      "recovery_seconds": 26.836
+    },
+    {
+      "test": "glasses_background",
+      "unix_ms": 1791382904642,
+      "passed": true,
+      "status": {
+        "protocol": 1,
+        "state": "connecting",
+        "frames": 1333,
+        "jpeg_bytes": 28053483,
+        "duplicates": 0,
+        "frame_age_ms": 4088,
+        "uptime_ms": 278464,
+        "source_session": "41ed8ec8-24a8-4a34-8366-d9045a55292b",
+        "sequence": 885,
+        "log_error": ""
+      },
+      "frame_http_status": 204,
+      "clear_seconds": 4.248
+    }
+  ],
+  "limitations": [
+    "Camera-permission denial recovery was not completed. Permission was restored before demo recording.",
+    "Phone foreground restart took 26.836 seconds.",
+    "In-class demonstration has not been performed."
+  ]
+}

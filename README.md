@@ -2,9 +2,11 @@
 
 Part A implementation: **glasses camera -> Android receiver/relay -> laptop viewer**.
 
-The Android source builds into two debug APKs. On October 5, 2026, the physical INMO AIR2 camera streamed through a Pixel 5 to the laptop browser over an iPhone hotspot. Both Android devices used 5 GHz Wi-Fi; no USB video forwarding was active. See `docs/VALIDATION.md` for evidence and remaining checks. No completed `BONUS-PartA` tag has been created.
+The Android source builds into two debug APKs. The physical INMO AIR2 -> Pixel 5 -> laptop path is verified over 5 GHz Wi-Fi on an iPhone hotspot, without USB video forwarding.
 
-This is the **Part A checkpoint**: the physical three-device stream is verified, including a 128.352-second run at 7.479 fps. The latest build, Android lint, seven Java tests, and ten Python/integration tests passed. Controlled hardware recovery tests, the recorded demo, and the required in-class demonstration remain pending. The completion tag will follow the remaining validation; Part B gaze estimation is not included.
+The **BONUS-PartA submission** includes a 128.352-second continuous hardware run at 7.479 fps, successful pause/resume, relay stop/restart, Wi-Fi reconnection and authentication checks, and verified 90-second phone and laptop recordings. Both builds, Android lint, seven Java tests and ten Python/integration tests passed. See [`docs/VALIDATION.md`](docs/VALIDATION.md) for measured evidence and remaining optional checks. The required in-class demonstration is still pending; Part B gaze estimation is not included.
+
+The local submission archive is `output/Bonus-PartA.zip`: source, both APKs, both demo clips, checksums and submission instructions. Camera recordings remain outside Git; GitHub contains the source and evidence summaries. The `BONUS-PartA` tag identifies this submission version.
 
 ## What is implemented
 
