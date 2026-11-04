@@ -1,5 +1,11 @@
 # CS536 Smart Glass Bonus Project - Initial Plan
 
+November 4 Part B update: actual AIR2 → CPH2611 phone → laptop gaze inference works over PAL3.0, with laptop-only inference, runtime controls and 224/448 scene-input selection. Downloaded-video and physical evidence are distinguished; broader field evaluation and the in-class demo remain pending.
+
+October 22 update: model input is selectable between 224 and 448 during streaming. Head-count warm-up plus 224/FP32 processed the classroom clip at 11.66 fps offline and approximately 8.00 fps through a paced software relay; 448/FP16 reached 10.16 fps offline with much closer prediction agreement to the native 448/FP32 baseline. These are downloaded-video prototype results, not live hardware or ground-truth accuracy validation. See `docs/PART_B.md` for tradeoffs and reproducible settings.
+
+October 21 update: Part B now has a laptop-only **MTGS static VSGaze** prototype estimating another person's gaze target/heatmap and in/out status. Inputs can be downloaded videos or the existing phone MJPEG relay, through the same inference engine. Downloaded-video and software relay validation passed, but the tested MTGS pipeline does not reliably sustain the 125 ms/frame budget. The final input will be live glasses video after borrowing the hardware; physical Part B validation is pending. See `docs/PART_B.md`. Phone inference and older translation proposals below are future/historical ideas, not the current implementation.
+
 Drafted September 11, 2026. Current direction: work solo, obtain the glasses from Prof Peng, and find access to an Android phone. No Android phone is available yet. Weekly time budget and AI application choice are still open. This is a proposal for discussion, not a commitment to a particular implementation.
 
 October 5 update: the INMO AIR2 and Pixel 5 are available, and the actual Part A stream has been verified through the phone to the laptop over Wi-Fi. The original planning sections below are retained as historical proposals. The selected Part B direction is now gaze estimation for a person visible to the glasses' outward-facing camera, with a direction-arrow overlay; this feature has not been implemented in the Part A checkpoint.

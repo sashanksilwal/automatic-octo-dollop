@@ -1,0 +1,13 @@
+{
+  "reference": "output/part-b/mtgs-walking",
+  "candidate": "output/part-b/optimization-2026-10-22/224-fp32-walking-warm",
+  "interpretation": "Prediction agreement only. Neither run is ground truth; no accuracy claim.",
+  "sampled_frames": 488,
+  "matched_heads": 348,
+  "unmatched_heads": 0,
+  "inout_agreement": 0.9655172413793104,
+  "mean_peak_shift_normalized": 0.31735922728922666,
+  "p95_peak_shift_normalized": 0.9789034442298178,
+  "mean_peak_shift_both_in_frame": 0.08790470188353128,
+  "mean_absolute_in_frame_score_change": 0.12941719575025057
+}

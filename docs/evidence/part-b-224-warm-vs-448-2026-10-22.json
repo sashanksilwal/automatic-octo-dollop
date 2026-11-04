@@ -1,0 +1,13 @@
+{
+  "reference": "output/part-b/mtgs-classroom",
+  "candidate": "output/part-b/optimization-2026-10-22/224-fp32-warm",
+  "interpretation": "Prediction agreement only. Neither run is ground truth; no accuracy claim.",
+  "sampled_frames": 105,
+  "matched_heads": 354,
+  "unmatched_heads": 0,
+  "inout_agreement": 0.7853107344632768,
+  "mean_peak_shift_normalized": 0.10256916143603297,
+  "p95_peak_shift_normalized": 0.34938562148434216,
+  "mean_peak_shift_both_in_frame": 0.09417356486664177,
+  "mean_absolute_in_frame_score_change": 0.20152473900372447
+}

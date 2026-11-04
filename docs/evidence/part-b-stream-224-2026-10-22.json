@@ -1,0 +1,33 @@
+{
+  "validation": "software simulation with downloaded video; not physical hardware",
+  "model": "mtgs-static-vsgaze",
+  "device": "mps",
+  "scene_size": 224,
+  "precision": "float32",
+  "warm_all_head_counts": true,
+  "measurement_s": 20.00502087501809,
+  "processed": 160,
+  "received": 161,
+  "actual_inference_fps": 7.997992154049943,
+  "status": {
+    "state": "running",
+    "settings": {
+      "fps": 8.0,
+      "max_faces": 4,
+      "confidence": 0.6,
+      "scene_size": 224
+    },
+    "processed": 161,
+    "skipped": 1,
+    "pipeline_ms": 82.06383296055719,
+    "error": "",
+    "overlay_frame": "4c2b55ed476d4799905df923a80b5f4b:56"
+  },
+  "annotated_http_frame": true,
+  "pause_raw_fallback": true,
+  "resume_and_settings": true,
+  "runtime_resolution_switch": true,
+  "disconnect_clears_video_and_overlay": true,
+  "reconnect_new_session": true,
+  "stop_clears_overlay": true
+}

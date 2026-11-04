@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>CS536 · Laptop gaze prototype</title>
+<style>
+body{font:15px system-ui;margin:32px auto;padding:0 20px;max-width:1000px;color:#171717;background:#fff}
+h1{font-size:25px}canvas{width:100%;max-height:65vh;object-fit:contain;background:#111;display:block}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0}button,input{font:inherit;padding:9px}input{width:75px}
+select{font:inherit;padding:9px}button{cursor:pointer}#status{line-height:1.8}#error{color:#a00}small{line-height:1.7}label{white-space:nowrap}
+</style>
+<h1>Laptop gaze estimation · Part B prototype</h1>
+<p>Camera/video → phone relay or file input → laptop face detection + gaze inference → arrows</p>
+<canvas id="video" width="640" height="480" aria-label="Video with estimated gaze arrows"></canvas>
+<div class="controls"><button data-action="start">Start inference</button><button data-action="pause">Pause</button>
+<button data-action="resume">Resume</button><button data-action="stop">Stop</button><button id="full">Full screen</button></div>
+<div class="controls"><label>Inference fps <input id="fps" type="number" min="0.5" max="8" step="0.5" value="8"></label>
+<label>Max faces <input id="max_faces" type="number" min="1" max="8" value="4"></label>
+<label>Face threshold <input id="confidence" type="number" min="0.5" max="0.99" step="0.01" value="0.6"></label>
+<label>MTGS input <select id="scene_size"><option value="224">224 × 224 · faster</option><option value="448" selected>448 × 448 · more scene detail</option></select></label>
+<button id="settings">Apply settings</button></div>
+<p id="status" role="status">Connecting</p><p id="error" role="alert"></p>
+<small>MTGS: orange arrows and circles show estimated in-frame targets; purple shows estimated out-of-frame gaze.
+Heatmap shows the largest detected head's prediction. MobileGaze baseline: green faces and orange direction arrows.
+Inference stopped/paused shows raw video.
+MTGS input changes laptop model resolution; incoming video and head crops retain their resolution. Switching may briefly warm a new GPU shape.
+Pipeline time includes face detection, gaze and drawing; it is separate from input fps and frame age.
+Downloaded-video testing does not validate live glasses or gaze accuracy. No wearer eye tracking.</small>
+<script>
+const canvas=document.querySelector('#video'),ctx=canvas.getContext('2d');let lastKey='',settingsInitialized=false;
+function showSettings(a){for(const k of ['fps','max_faces','confidence','scene_size']){if(k in a.settings)document.getElementById(k).value=a.settings[k]}document.querySelector('#scene_size').disabled=!('scene_size' in a.settings)}
+async function control(data){try{const r=await fetch('/ai/control',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});const s=await r.json();if(!r.ok)throw Error(s.error);showSettings(s);document.querySelector('#error').textContent='';lastKey='';}catch(e){document.querySelector('#error').textContent=e.message}}
+document.querySelectorAll('[data-action]').forEach(b=>b.onclick=()=>control({action:b.dataset.action}));
+document.querySelector('#settings').onclick=()=>control({action:'settings',fps:+document.querySelector('#fps').value,max_faces:+document.querySelector('#max_faces').value,confidence:+document.querySelector('#confidence').value,scene_size:+document.querySelector('#scene_size').value});
+document.querySelector('#full').onclick=()=>canvas.requestFullscreen();
+async function draw(){try{const r=await fetch('/frame',{cache:'no-store',signal:AbortSignal.timeout(2000)});if(r.status===204){ctx.clearRect(0,0,canvas.width,canvas.height);lastKey=''}else if(r.ok){const key=r.headers.get('X-Frame-Key');if(key!==lastKey){const bitmap=await createImageBitmap(await r.blob());canvas.width=bitmap.width;canvas.height=bitmap.height;ctx.drawImage(bitmap,0,0);bitmap.close();lastKey=key}}else throw Error('Frame unavailable')}catch(e){ctx.clearRect(0,0,canvas.width,canvas.height);lastKey=''}setTimeout(draw,60)}
+async function status(){try{const [sr,ar]=await Promise.all([fetch('/status',{signal:AbortSignal.timeout(2000)}),fetch('/ai',{signal:AbortSignal.timeout(2000)})]);const s=await sr.json(),a=await ar.json();if(!settingsInitialized){showSettings(a);settingsInitialized=true}document.querySelector('#status').textContent=`Input: ${s.state} · Inference: ${a.state} · Target: ${a.settings.fps} fps · Model input: ${a.settings.scene_size||'baseline'} · Pipeline: ${a.pipeline_ms.toFixed(1)} ms · Processed: ${a.processed} · Skipped input frames: ${a.skipped} · Frame age: ${s.frame_age_ms} ms · ${a.overlay_frame?'Gaze overlay':'Raw / waiting for fresh inference'}`;document.querySelector('#error').textContent=a.error||s.log_error||''}catch(e){document.querySelector('#status').textContent='Viewer unavailable';ctx.clearRect(0,0,canvas.width,canvas.height)}setTimeout(status,500)}
+draw();status();
+</script></html>

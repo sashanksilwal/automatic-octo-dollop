@@ -1,0 +1,13 @@
+{
+  "reference": "output/part-b/mtgs-classroom",
+  "candidate": "output/part-b/optimization-2026-10-22/448-fp16-warm",
+  "interpretation": "Prediction agreement only. Neither run is ground truth; no accuracy claim.",
+  "sampled_frames": 105,
+  "matched_heads": 354,
+  "unmatched_heads": 0,
+  "inout_agreement": 1.0,
+  "mean_peak_shift_normalized": 0.0014474028997959014,
+  "p95_peak_shift_normalized": 0.0,
+  "mean_peak_shift_both_in_frame": 0.0002403846153846154,
+  "mean_absolute_in_frame_score_change": 0.0005555323346144399
+}
