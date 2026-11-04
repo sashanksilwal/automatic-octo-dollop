@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera.any" android:required="false" />
-    <application android:label="CS536 Glasses" android:theme="@android:style/Theme.Material.NoActionBar"
+    <application android:label="${appLabel}" android:theme="@android:style/Theme.Material.NoActionBar"
         android:icon="@drawable/ic_glasses" android:allowBackup="false" android:fullBackupContent="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:supportsRtl="true" android:usesCleartextTraffic="true">

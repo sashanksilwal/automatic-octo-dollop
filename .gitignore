@@ -10,3 +10,8 @@ __pycache__/
 .venv/
 data/raw/
 output/
+tmp/
+
+# Keep report and presentation drafts local.
+/report/
+/presentation/
