@@ -1,5 +1,7 @@
 # CS536 Smart Glass - Parts A and B
 
+**Part C progress:** twelve stationary PAL3.0 runs saved 24 measured minutes. One five-minute walking pilot saved three-device traces and exposed four receive gaps above 500 ms, with a maximum of 15.13 seconds. It is one actual pilot, without extrapolation into extra runs or hours. 5G, additional scenario/run coverage and more than one hour total remain pending. See [`Bonus-PartC/`](Bonus-PartC/README.md).
+
 **Part B implementation:** local laptop gaze estimation accepts downloaded videos or the Android phone relay through the same engine. It provides head/target overlays, in/out estimates, selectable 224/448 scene input and runtime Start, Pause/Resume and Stop controls. The physical AIR2 → CPH2611 phone → laptop path works on PAL3.0. The required in-class demonstration and broader field evaluation remain outstanding. See [`docs/PART_B.md`](docs/PART_B.md) for setup, sources, timing and validation.
 
 Part A implementation: **glasses camera -> Android receiver/relay -> laptop viewer**.

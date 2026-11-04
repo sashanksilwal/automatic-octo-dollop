@@ -1,0 +1,16 @@
+{
+  "recorded_at": "2026-11-04, after baseline collection",
+  "chip": "Apple M5",
+  "memory_bytes": 25769803776,
+  "memory_gib": 24,
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "python": "3.12.14",
+  "torch": "2.14.1",
+  "numpy": "2.5.4",
+  "opencv": "5.0.0",
+  "mps_available": true,
+  "inference_precision": "float32",
+  "scene_input": 224,
+  "note": "Hardware/runtime inventory recorded after the runs; see batch APK/source hashes and per-frame inference settings.",
+  "inventory_permissions": "same unrestricted GPU access as the running laptop inference viewer"
+}

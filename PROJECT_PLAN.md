@@ -1,5 +1,7 @@
 # CS536 Smart Glass Bonus Project - Initial Plan
 
+November 4 Part C update: twelve stationary PAL3.0 runs and one five-minute walking pilot are saved with analysis and per-hop trace metadata. The pilot exposed delivery gaps. The operator deferred 5G and remaining field tests. Full Part C coverage remains incomplete.
+
 November 4 Part B update: actual AIR2 → CPH2611 phone → laptop gaze inference works over PAL3.0, with laptop-only inference, runtime controls and 224/448 scene-input selection. Downloaded-video and physical evidence are distinguished; broader field evaluation and the in-class demo remain pending.
 
 October 22 update: model input is selectable between 224 and 448 during streaming. Head-count warm-up plus 224/FP32 processed the classroom clip at 11.66 fps offline and approximately 8.00 fps through a paced software relay; 448/FP16 reached 10.16 fps offline with much closer prediction agreement to the native 448/FP32 baseline. These are downloaded-video prototype results, not live hardware or ground-truth accuracy validation. See `docs/PART_B.md` for tradeoffs and reproducible settings.

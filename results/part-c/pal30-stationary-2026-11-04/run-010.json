@@ -1,0 +1,164 @@
+{
+  "variant": "baseline",
+  "run_id": "run-010",
+  "network": "PAL3.0",
+  "scenario": "stationary",
+  "duration_s": 120.0051115,
+  "source_session": "c7173ac1-a564-4a55-a49d-7f6d5de614d6",
+  "status": "complete",
+  "laptop_received_frames": 895,
+  "inferred_frames": 873,
+  "published_frames": 872,
+  "actual_laptop_receive_fps": 7.458015652941583,
+  "actual_inference_fps": 7.274690128511734,
+  "actual_published_fps": 7.2663571501285595,
+  "received_without_inference": 22,
+  "head_containing_inferences": 873,
+  "pipeline_ms": {
+    "n": 873,
+    "mean": 64.00593520979048,
+    "p50": 62.38191691227257,
+    "p95": 70.13410776853561,
+    "max": 324.7891659848392
+  },
+  "head_pipeline_ms": {
+    "n": 873,
+    "mean": 64.00593520979048,
+    "p50": 62.38191691227257,
+    "p95": 70.13410776853561,
+    "max": 324.7891659848392
+  },
+  "pipeline_over_125_ms": 2,
+  "pipeline_over_125_fraction": 0.002290950744558992,
+  "detection_ms": {
+    "n": 873,
+    "mean": 22.566699472235737,
+    "p50": 21.301375003531575,
+    "p95": 28.607308026403185,
+    "max": 192.69541604444385
+  },
+  "gaze_and_overlay_ms": {
+    "n": 873,
+    "mean": 41.439235737554746,
+    "p50": 40.90933292172849,
+    "p95": 44.405599823221564,
+    "max": 132.09374994039536
+  },
+  "local_receive_to_result_ms": {
+    "n": 873,
+    "mean": 86.85510502133373,
+    "p50": 70.05300000309944,
+    "p95": 156.88965786248446,
+    "max": 330.3635000484064
+  },
+  "worker_ms": {
+    "n": 873,
+    "mean": 65.71798993248966,
+    "p50": 64.11295896396041,
+    "p95": 72.28223343845457,
+    "max": 330.2991660311818
+  },
+  "worker_over_125_ms": 2,
+  "laptop_interarrival_ms": {
+    "n": 894,
+    "mean": 133.98470907941834,
+    "p50": 133.9352915,
+    "p95": 221.52264999999997,
+    "max": 354.827084
+  },
+  "laptop_jitter_abs_deviation_from_median_ms": {
+    "n": 894,
+    "mean": 37.83852274832215,
+    "p50": 26.545958499999998,
+    "p95": 103.15170795,
+    "max": 220.8917925
+  },
+  "laptop_silence_over_500_ms": 0,
+  "laptop_silence_excess_s": 0,
+  "laptop_max_silence_s": 0.354827084,
+  "phone_to_glasses_ping_rtt_ms": {
+    "n": 6,
+    "mean": 65.94666666666667,
+    "p50": 33.75,
+    "p95": 181.25,
+    "max": 207.0
+  },
+  "ping_probes": 6,
+  "ping_failed_probes": 0,
+  "status_samples": 119,
+  "status_error_samples": 0,
+  "nonstreaming_status_samples": 0,
+  "protocol_deviation_samples": 0,
+  "source_sequence_interval": [
+    81,
+    976
+  ],
+  "source_generated_in_matched_interval": 896,
+  "source_capture_fps_matched_interval": 7.469483405246726,
+  "phone_receive_fps_matched_interval": 7.467366999602889,
+  "source_frames_missing_at_phone_in_matched_interval": 0,
+  "phone_frames_missing_at_laptop_in_matched_interval": 1,
+  "laptop_payload_mbps": 1.3762027128319447,
+  "phone_payload_mbps_matched_interval": 1.3794871714566952,
+  "device_start": {
+    "glasses": {
+      "ssid": "PAL3.0",
+      "rssi_dbm": -58,
+      "frequency_mhz": 5260,
+      "link_speed_mbps": 86,
+      "battery_percent": 51,
+      "temperature_tenths_c": 249
+    },
+    "phone": {
+      "ssid": "PAL3.0",
+      "rssi_dbm": -61,
+      "frequency_mhz": 5260,
+      "link_speed_mbps": 258,
+      "battery_percent": 100,
+      "temperature_tenths_c": 280
+    }
+  },
+  "device_end": {
+    "glasses": {
+      "ssid": "PAL3.0",
+      "rssi_dbm": -57,
+      "frequency_mhz": 5260,
+      "link_speed_mbps": 86,
+      "battery_percent": 50,
+      "temperature_tenths_c": 250
+    },
+    "phone": {
+      "ssid": "PAL3.0",
+      "rssi_dbm": -61,
+      "frequency_mhz": 5260,
+      "link_speed_mbps": 258,
+      "battery_percent": 100,
+      "temperature_tenths_c": 277
+    }
+  },
+  "limitations": [
+    "payload throughput excludes HTTP/TCP/Wi-Fi overhead; not link capacity",
+    "ping is phone-to-glasses RTT, not one-way video latency",
+    "local receive-to-result excludes camera, relay, network and browser display",
+    "received_without_inference includes intentional cadence/buffer drops and window boundaries",
+    "no ground-truth gaze accuracy or independent-subject claim",
+    "inference throughput uses frames received in the window; a result may finish just after its boundary",
+    "Phone display timing ends at the logged UI callback, not a calibrated physical screen event."
+  ],
+  "glasses_frame_sent_unique_frames_matched_interval": 896,
+  "glasses_frame_sent_fps_matched_interval": 7.4693098629955035,
+  "glasses_frame_sent_payload_mbps_matched_interval": 1.379846087139579,
+  "phone_frame_sent_unique_frames_matched_interval": 895,
+  "phone_frame_sent_fps_matched_interval": 7.459536884754425,
+  "phone_frame_sent_payload_mbps_matched_interval": 1.3780231112833965,
+  "phone_frame_displayed_unique_frames_matched_interval": 874,
+  "phone_frame_displayed_fps_matched_interval": 7.287533903164144,
+  "phone_frame_displayed_payload_mbps_matched_interval": 1.346271265546954,
+  "phone_local_receive_to_display_callback_ms": {
+    "n": 874,
+    "mean": 57.08464421739131,
+    "p50": 57.863724,
+    "p95": 103.0183204,
+    "max": 112.016406
+  }
+}
