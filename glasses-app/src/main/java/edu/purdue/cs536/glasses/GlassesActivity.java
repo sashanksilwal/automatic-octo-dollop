@@ -22,6 +22,7 @@ public final class GlassesActivity extends Activity implements SurfaceHolder.Cal
     private EditText cameraId, fps, quality, rotation, port, token;
     private TextView status, addresses, statistics;
     private Button start, pause, stop;
+    private CheckBox steadyPacing;
     private FrameHub hub;
     private StreamServer server;
     private CsvTrace trace;
@@ -43,6 +44,10 @@ public final class GlassesActivity extends Activity implements SurfaceHolder.Cal
         port = field(form,"Listen port","port","8080",true);
         token = field(form,"Pairing code (enter this on the phone)","token",AppUi.code(),false);
         AppUi.text(this, form, "Capture requests 640×480.");
+        steadyPacing = new CheckBox(this);
+        steadyPacing.setText("Use steady capture pacing");
+        steadyPacing.setChecked(preferences.getBoolean("steadyPacing",false));
+        form.addView(steadyPacing);
         statistics = AppUi.text(this, form, "No frames yet");
         start = AppUi.button(this, form, "Start camera stream", this::startStream);
         pause = AppUi.button(this, form, "Pause", this::togglePause);
@@ -61,16 +66,16 @@ public final class GlassesActivity extends Activity implements SurfaceHolder.Cal
         try {
             int angle=AppUi.number(rotation,0,270);
             if (angle % 90 != 0) throw new IllegalArgumentException("Rotation must be 0, 90, 180 or 270");
-            config = new CameraCapture.Config(AppUi.number(cameraId,0,9),640,480,AppUi.number(fps,1,15),AppUi.number(quality,30,90),angle);
+            config = new CameraCapture.Config(AppUi.number(cameraId,0,9),640,480,AppUi.number(fps,1,15),AppUi.number(quality,30,90),angle,steadyPacing.isChecked());
             int listen = AppUi.number(port,1024,65535);
             File file = AppUi.traceFile(this,"glasses"); trace = new CsvTrace(file); hub = new FrameHub(trace);
             server = new StreamServer("0.0.0.0",listen,token.getText().toString().trim(),hub,trace);
             active=true; paused=false; generation++;
             preferences.edit().putString("camera",cameraId.getText().toString()).putString("fps",fps.getText().toString())
                 .putString("quality",quality.getText().toString()).putString("rotation",rotation.getText().toString())
-                .putString("port",port.getText().toString()).putString("token",token.getText().toString().trim()).apply();
+                .putBoolean("steadyPacing",steadyPacing.isChecked()).putString("port",port.getText().toString()).putString("token",token.getText().toString().trim()).apply();
             addresses.setText(AppUi.addresses(listen) + "\nTrace: " + file.getAbsolutePath());
-            trace.event("config",null,"camera="+config.cameraId+";fps="+config.fps+";quality="+config.quality+";rotation="+angle);
+            trace.event("config",null,"camera="+config.cameraId+";fps="+config.fps+";quality="+config.quality+";rotation="+angle+";pacing="+(config.steadyPacing?"absolute":"callback-relative"));
             beginCapture(); updateButtons();
         } catch (IOException | IllegalArgumentException e) { stopStream("Cannot start: " + e.getMessage()); }
     }
@@ -101,6 +106,7 @@ public final class GlassesActivity extends Activity implements SurfaceHolder.Cal
         status.setText(reason); updateButtons();
     }
     private void updateButtons() {
+        steadyPacing.setEnabled(!active);
         start.setEnabled(!active); pause.setEnabled(active); stop.setEnabled(active); pause.setText(paused?"Resume":"Pause");
         for (EditText e : new EditText[]{cameraId,fps,quality,rotation,port,token}) e.setEnabled(!active);
     }

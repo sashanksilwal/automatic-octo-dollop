@@ -1,0 +1,105 @@
+{
+  "baseline": {
+    "complete_runs": 12,
+    "measured_s": 1440.045043208,
+    "inferred_frames": 10473,
+    "mean_source_fps": 7.460138134252772,
+    "receive_fps": 7.455322353030935,
+    "inference_fps": 7.272689176908809,
+    "payload_mbps": 1.3909885898691814,
+    "pipeline_mean_ms": 63.437615612901574,
+    "mean_of_run_pipeline_p95_ms": 72.84393240212619,
+    "mean_of_run_receive_to_result_p95_ms": 155.08598195253094,
+    "pipeline_over_125_fraction": 0.004201279480569082,
+    "receive_stalls_per_measured_min": 0.0
+  },
+  "enhanced": {
+    "complete_runs": 2,
+    "measured_s": 120.00531799999999,
+    "inferred_frames": 912,
+    "mean_source_fps": 8.000599269709545,
+    "receive_fps": 7.991312518333563,
+    "inference_fps": 7.599663208258821,
+    "payload_mbps": 1.499473814985433,
+    "pipeline_mean_ms": 62.91575451433074,
+    "mean_of_run_pipeline_p95_ms": 71.4551810757257,
+    "mean_of_run_receive_to_result_p95_ms": 167.22999996272847,
+    "pipeline_over_125_fraction": 0.003289473684210526,
+    "receive_stalls_per_measured_min": 0.0
+  },
+  "changes": {
+    "mean_source_fps": {
+      "baseline": 7.460138134252772,
+      "enhanced": 8.000599269709545,
+      "absolute_change": 0.5404611354567725,
+      "relative_change_percent": 7.2446531918126
+    },
+    "receive_fps": {
+      "baseline": 7.455322353030935,
+      "enhanced": 7.991312518333563,
+      "absolute_change": 0.5359901653026284,
+      "relative_change_percent": 7.189362711925162
+    },
+    "inference_fps": {
+      "baseline": 7.272689176908809,
+      "enhanced": 7.599663208258821,
+      "absolute_change": 0.32697403135001224,
+      "relative_change_percent": 4.495916481460149
+    },
+    "payload_mbps": {
+      "baseline": 1.3909885898691814,
+      "enhanced": 1.499473814985433,
+      "absolute_change": 0.10848522511625158,
+      "relative_change_percent": 7.79914557936483
+    },
+    "pipeline_mean_ms": {
+      "baseline": 63.437615612901574,
+      "enhanced": 62.91575451433074,
+      "absolute_change": -0.521861098570831,
+      "relative_change_percent": -0.8226366857090661
+    },
+    "mean_of_run_pipeline_p95_ms": {
+      "baseline": 72.84393240212619,
+      "enhanced": 71.4551810757257,
+      "absolute_change": -1.388751326400481,
+      "relative_change_percent": -1.9064749535130043
+    },
+    "mean_of_run_receive_to_result_p95_ms": {
+      "baseline": 155.08598195253094,
+      "enhanced": 167.22999996272847,
+      "absolute_change": 12.144018010197527,
+      "relative_change_percent": 7.830506572744023
+    },
+    "pipeline_over_125_fraction": {
+      "baseline": 0.004201279480569082,
+      "enhanced": 0.003289473684210526,
+      "absolute_change": -0.0009118057963585563,
+      "relative_change_percent": -21.703050239234457
+    },
+    "receive_stalls_per_measured_min": {
+      "baseline": 0.0,
+      "enhanced": 0.0,
+      "absolute_change": 0.0,
+      "relative_change_percent": null
+    }
+  },
+  "comparison_kind": "sequential preliminary physical evaluation",
+  "matching_checks": [
+    "camera settings",
+    "inference settings",
+    "network and scenario",
+    "phone APK hash",
+    "laptop/phone/shared relay source hashes"
+  ],
+  "limitations": [
+    "Same devices/session; no independent-subject claim.",
+    "Stationary camera placement does not control head counts or background activity.",
+    "Sequential conditions were not randomized or interleaved.",
+    "Run counts and durations may differ; this is a small preliminary field check.",
+    "Laptop authoring/build workload varied during baseline; local timing changes are descriptive.",
+    "No ground-truth gaze accuracy improvement is claimed.",
+    "5G and other scenarios remain pending."
+  ],
+  "preliminary_physical_comparison_available": true,
+  "full_project_validated": false
+}

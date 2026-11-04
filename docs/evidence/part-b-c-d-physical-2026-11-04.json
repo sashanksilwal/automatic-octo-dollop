@@ -1,0 +1,404 @@
+{
+  "date": "2026-11-04",
+  "validation_kind": "physical PAL3.0 stationary trials; partial field validation",
+  "pipeline": "AIR2 camera -> CPH2611 Android relay -> local laptop inference -> laptop viewer",
+  "phone_inference": false,
+  "hardware": {
+    "recorded_at": "2026-11-04, after baseline collection",
+    "chip": "Apple M5",
+    "memory_bytes": 25769803776,
+    "memory_gib": 24,
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "python": "3.12.14",
+    "torch": "2.14.1",
+    "numpy": "2.5.4",
+    "opencv": "5.0.0",
+    "mps_available": true,
+    "inference_precision": "float32",
+    "scene_input": 224,
+    "note": "Hardware/runtime inventory recorded after the runs; see batch APK/source hashes and per-frame inference settings.",
+    "inventory_permissions": "same unrestricted GPU access as the running laptop inference viewer"
+  },
+  "baseline": {
+    "variant": "baseline",
+    "batch": "data/raw/part-c/2026-11-04-pal30-stationary-attempt03",
+    "network": "PAL3.0",
+    "scenario": "stationary",
+    "planned_runs": 12,
+    "complete_runs": 12,
+    "excluded_runs": [],
+    "total_measured_s": 1440.045043208,
+    "scope": "stationary PAL3.0 baseline batch; partial field evidence",
+    "actual_inference_fps_pooled": 7.272689176908809,
+    "actual_receive_fps_pooled": 7.455322353030935,
+    "per_run_inference_fps": {
+      "n": 12,
+      "mean": 7.272689264420046,
+      "p50": 7.278898217413767,
+      "p95": 7.331533149275858,
+      "max": 7.3499267048771655
+    },
+    "per_run_pipeline_p95_ms": {
+      "n": 12,
+      "mean": 72.84393240212619,
+      "p50": 73.23949811398052,
+      "p95": 75.0359381607268,
+      "max": 75.12743753613904
+    },
+    "full_part_c_validated": false,
+    "pending": [
+      "5G trials",
+      "multiple field scenarios",
+      "more than one hour total",
+      "cross-device/display latency if required",
+      "in-class demo"
+    ]
+  },
+  "preliminary_pacing_comparison": {
+    "baseline": {
+      "complete_runs": 12,
+      "measured_s": 1440.045043208,
+      "inferred_frames": 10473,
+      "mean_source_fps": 7.460138134252772,
+      "receive_fps": 7.455322353030935,
+      "inference_fps": 7.272689176908809,
+      "payload_mbps": 1.3909885898691814,
+      "pipeline_mean_ms": 63.437615612901574,
+      "mean_of_run_pipeline_p95_ms": 72.84393240212619,
+      "mean_of_run_receive_to_result_p95_ms": 155.08598195253094,
+      "pipeline_over_125_fraction": 0.004201279480569082,
+      "receive_stalls_per_measured_min": 0.0
+    },
+    "enhanced": {
+      "complete_runs": 2,
+      "measured_s": 120.00531799999999,
+      "inferred_frames": 912,
+      "mean_source_fps": 8.000599269709545,
+      "receive_fps": 7.991312518333563,
+      "inference_fps": 7.599663208258821,
+      "payload_mbps": 1.499473814985433,
+      "pipeline_mean_ms": 62.91575451433074,
+      "mean_of_run_pipeline_p95_ms": 71.4551810757257,
+      "mean_of_run_receive_to_result_p95_ms": 167.22999996272847,
+      "pipeline_over_125_fraction": 0.003289473684210526,
+      "receive_stalls_per_measured_min": 0.0
+    },
+    "changes": {
+      "mean_source_fps": {
+        "baseline": 7.460138134252772,
+        "enhanced": 8.000599269709545,
+        "absolute_change": 0.5404611354567725,
+        "relative_change_percent": 7.2446531918126
+      },
+      "receive_fps": {
+        "baseline": 7.455322353030935,
+        "enhanced": 7.991312518333563,
+        "absolute_change": 0.5359901653026284,
+        "relative_change_percent": 7.189362711925162
+      },
+      "inference_fps": {
+        "baseline": 7.272689176908809,
+        "enhanced": 7.599663208258821,
+        "absolute_change": 0.32697403135001224,
+        "relative_change_percent": 4.495916481460149
+      },
+      "payload_mbps": {
+        "baseline": 1.3909885898691814,
+        "enhanced": 1.499473814985433,
+        "absolute_change": 0.10848522511625158,
+        "relative_change_percent": 7.79914557936483
+      },
+      "pipeline_mean_ms": {
+        "baseline": 63.437615612901574,
+        "enhanced": 62.91575451433074,
+        "absolute_change": -0.521861098570831,
+        "relative_change_percent": -0.8226366857090661
+      },
+      "mean_of_run_pipeline_p95_ms": {
+        "baseline": 72.84393240212619,
+        "enhanced": 71.4551810757257,
+        "absolute_change": -1.388751326400481,
+        "relative_change_percent": -1.9064749535130043
+      },
+      "mean_of_run_receive_to_result_p95_ms": {
+        "baseline": 155.08598195253094,
+        "enhanced": 167.22999996272847,
+        "absolute_change": 12.144018010197527,
+        "relative_change_percent": 7.830506572744023
+      },
+      "pipeline_over_125_fraction": {
+        "baseline": 0.004201279480569082,
+        "enhanced": 0.003289473684210526,
+        "absolute_change": -0.0009118057963585563,
+        "relative_change_percent": -21.703050239234457
+      },
+      "receive_stalls_per_measured_min": {
+        "baseline": 0.0,
+        "enhanced": 0.0,
+        "absolute_change": 0.0,
+        "relative_change_percent": null
+      }
+    },
+    "comparison_kind": "sequential preliminary physical evaluation",
+    "matching_checks": [
+      "camera settings",
+      "inference settings",
+      "network and scenario",
+      "phone APK hash",
+      "laptop/phone/shared relay source hashes"
+    ],
+    "limitations": [
+      "Same devices/session; no independent-subject claim.",
+      "Stationary camera placement does not control head counts or background activity.",
+      "Sequential conditions were not randomized or interleaved.",
+      "Run counts and durations may differ; this is a small preliminary field check.",
+      "Laptop authoring/build workload varied during baseline; local timing changes are descriptive.",
+      "No ground-truth gaze accuracy improvement is claimed.",
+      "5G and other scenarios remain pending."
+    ],
+    "preliminary_physical_comparison_available": true,
+    "full_project_validated": false
+  },
+  "physical_walking_recording": {
+    "path": "output/report-assets/2026-11-04-live/live-walking-gaze-135528.mp4",
+    "encoded_fps": 8,
+    "frames": 916,
+    "duration_s": 114.5,
+    "counted_as_prospective_part_c_run": false
+  },
+  "report_screenshot_selection": {
+    "count": 12,
+    "third_frame_s": 29,
+    "overlays_modified": false
+  },
+  "complete_part_c": false,
+  "ground_truth_gaze_accuracy_available": false,
+  "in_class_demo_completed": false,
+  "completion_tags_created": false,
+  "walking_pilot": {
+    "trial_kind": "one continuous physical walking pilot",
+    "scenario": "walking",
+    "network": "PAL3.0",
+    "independent_runs": 1,
+    "extrapolated": false,
+    "measured_duration_s": 300.001908292,
+    "received_frames": 1996,
+    "inferred_frames": 1963,
+    "published_frames": 1961,
+    "head_containing_inferences": 359,
+    "actual_receive_fps": 6.653291011926628,
+    "actual_inference_fps": 6.5432917116292435,
+    "actual_published_fps": 6.536625087368796,
+    "received_without_inference": 33,
+    "pipeline_ms": {
+      "n": 1963,
+      "mean": 30.49095873735177,
+      "p50": 22.478666971437633,
+      "p95": 66.25035408651456,
+      "max": 178.39424998965114
+    },
+    "head_pipeline_ms": {
+      "n": 359,
+      "mean": 65.47340366653424,
+      "p50": 62.83141695894301,
+      "p95": 75.46442059101537,
+      "max": 134.3040419742465
+    },
+    "worker_ms": {
+      "n": 1963,
+      "mean": 32.38744399553261,
+      "p50": 24.475709069520235,
+      "p95": 68.04757082136346,
+      "max": 183.63766698166728
+    },
+    "local_receive_to_result_ms": {
+      "n": 1963,
+      "mean": 46.22126519553111,
+      "p50": 28.392957989126444,
+      "p95": 114.1481544473208,
+      "max": 207.08566589746624
+    },
+    "pipeline_over_125_ms": 4,
+    "worker_over_125_ms": 4,
+    "payload_mbps": 1.0890482725929793,
+    "interarrival_ms": {
+      "n": 1995,
+      "mean": 150.3236329784461,
+      "p50": 133.675292,
+      "p95": 219.9243043,
+      "max": 15132.189333
+    },
+    "max_receive_silence_s": 15.132189333,
+    "receive_silences_over_500_ms": 4,
+    "receive_silence_excess_s": 31.391973625000002,
+    "jitter_abs_deviation_from_median_ms": {
+      "n": 1995,
+      "mean": 50.749839986967416,
+      "p50": 15.557084000000017,
+      "p95": 112.72845869999996,
+      "max": 14998.514041
+    },
+    "ping_rtt_ms": {
+      "n": 13,
+      "mean": 14.956923076923076,
+      "p50": 10.2,
+      "p95": 36.33999999999993,
+      "max": 64.3
+    },
+    "ping_probes": 15,
+    "ping_failed_probes": 2,
+    "status_error_samples": 0,
+    "nonstreaming_status_samples": 22,
+    "source_sessions": [
+      "33fa0d8b-ee05-4dfa-98da-613f753d9adc"
+    ],
+    "phone_trace_status": "exported via wireless ADB after measurement",
+    "glasses_trace_status": "exported after USB reconnection following the completed measurement",
+    "full_part_c_validated": false,
+    "ground_truth_gaze_accuracy_available": false,
+    "limitations": [
+      "One five-minute run cannot establish hour-long reliability or replace ten separately collected runs.",
+      "Thirty-second plotting windows below are correlated segments of one pilot, not independent trials.",
+      "Inference throughput uses the received-frame cohort; final work can finish just after the window.",
+      "Local latency excludes glasses capture, phone/network transit and physical browser display.",
+      "No ground-truth gaze accuracy is inferred from detected heads or model scores."
+    ],
+    "frame_envelope_metadata_verified_across_three_devices": true,
+    "receive_gap_episodes": [
+      {
+        "laptop_receive_gap_s": 15.132189333,
+        "previous_frame": [
+          "33fa0d8b-ee05-4dfa-98da-613f753d9adc",
+          6975
+        ],
+        "next_frame": [
+          "33fa0d8b-ee05-4dfa-98da-613f753d9adc",
+          7088
+        ],
+        "start_elapsed_s": 93.550107417,
+        "glasses_frames_in_same_sequence_interval": 114,
+        "glasses_max_local_receive_gap_s": 0.167737346,
+        "phone_frames_in_same_sequence_interval": 8,
+        "phone_max_local_receive_gap_s": 14.377926609,
+        "camera_sequence_span_inclusive": 114,
+        "interpretation_limit": "Per-hop gap observations; these do not identify the Wi-Fi or application root cause."
+      },
+      {
+        "laptop_receive_gap_s": 0.829075125,
+        "previous_frame": [
+          "33fa0d8b-ee05-4dfa-98da-613f753d9adc",
+          7383
+        ],
+        "next_frame": [
+          "33fa0d8b-ee05-4dfa-98da-613f753d9adc",
+          7384
+        ],
+        "start_elapsed_s": 148.168402125,
+        "glasses_frames_in_same_sequence_interval": 2,
+        "glasses_max_local_receive_gap_s": 0.138433654,
+        "phone_frames_in_same_sequence_interval": 2,
+        "phone_max_local_receive_gap_s": 0.13388474,
+        "camera_sequence_span_inclusive": 2,
+        "interpretation_limit": "Per-hop gap observations; these do not identify the Wi-Fi or application root cause."
+      },
+      {
+        "laptop_receive_gap_s": 8.815454,
+        "previous_frame": [
+          "33fa0d8b-ee05-4dfa-98da-613f753d9adc",
+          7584
+        ],
+        "next_frame": [
+          "33fa0d8b-ee05-4dfa-98da-613f753d9adc",
+          7647
+        ],
+        "start_elapsed_s": 175.2130345,
+        "glasses_frames_in_same_sequence_interval": 64,
+        "glasses_max_local_receive_gap_s": 0.530415615,
+        "phone_frames_in_same_sequence_interval": 12,
+        "phone_max_local_receive_gap_s": 7.56204682,
+        "camera_sequence_span_inclusive": 64,
+        "interpretation_limit": "Per-hop gap observations; these do not identify the Wi-Fi or application root cause."
+      },
+      {
+        "laptop_receive_gap_s": 8.615255167,
+        "previous_frame": [
+          "33fa0d8b-ee05-4dfa-98da-613f753d9adc",
+          7811
+        ],
+        "next_frame": [
+          "33fa0d8b-ee05-4dfa-98da-613f753d9adc",
+          7874
+        ],
+        "start_elapsed_s": 206.026391458,
+        "glasses_frames_in_same_sequence_interval": 64,
+        "glasses_max_local_receive_gap_s": 0.142972423,
+        "phone_frames_in_same_sequence_interval": 3,
+        "phone_max_local_receive_gap_s": 8.378734685,
+        "camera_sequence_span_inclusive": 64,
+        "interpretation_limit": "Per-hop gap observations; these do not identify the Wi-Fi or application root cause."
+      }
+    ],
+    "correlated_30s_windows": [
+      {
+        "start_s": 0,
+        "duration_s": 30.0,
+        "received_fps": 7.433333333333334,
+        "inferred_fps": 7.433333333333334
+      },
+      {
+        "start_s": 30,
+        "duration_s": 30.0,
+        "received_fps": 7.466666666666667,
+        "inferred_fps": 7.466666666666667
+      },
+      {
+        "start_s": 60,
+        "duration_s": 30.0,
+        "received_fps": 7.433333333333334,
+        "inferred_fps": 7.366666666666666
+      },
+      {
+        "start_s": 90,
+        "duration_s": 30.0,
+        "received_fps": 3.7333333333333334,
+        "inferred_fps": 3.7333333333333334
+      },
+      {
+        "start_s": 120,
+        "duration_s": 30.0,
+        "received_fps": 7.466666666666667,
+        "inferred_fps": 7.233333333333333
+      },
+      {
+        "start_s": 150,
+        "duration_s": 30.0,
+        "received_fps": 6.266666666666667,
+        "inferred_fps": 6.066666666666666
+      },
+      {
+        "start_s": 180,
+        "duration_s": 30.0,
+        "received_fps": 5.5,
+        "inferred_fps": 5.366666666666666
+      },
+      {
+        "start_s": 210,
+        "duration_s": 30.0,
+        "received_fps": 6.366666666666666,
+        "inferred_fps": 6.066666666666666
+      },
+      {
+        "start_s": 240,
+        "duration_s": 30.0,
+        "received_fps": 7.4,
+        "inferred_fps": 7.266666666666667
+      },
+      {
+        "start_s": 270,
+        "duration_s": 30.0,
+        "received_fps": 7.466666666666667,
+        "inferred_fps": 7.433333333333334
+      }
+    ]
+  }
+}

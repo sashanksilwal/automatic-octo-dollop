@@ -8,7 +8,7 @@ android {
         targetSdk 35
         versionCode 1
         versionName '0.1.0'
-        manifestPlaceholders = [appLabel: project.hasProperty('cs536ApplicationIdSuffix') ? 'CS536 Glasses Live Test' : 'CS536 Glasses']
+        manifestPlaceholders = [appLabel: project.findProperty('cs536ApplicationIdSuffix') == '.partd' ? 'CS536 Glasses Pacing Test' : (project.hasProperty('cs536ApplicationIdSuffix') ? 'CS536 Glasses Live Test' : 'CS536 Glasses')]
     }
     buildTypes {
         debug { applicationIdSuffix (project.findProperty('cs536ApplicationIdSuffix') ?: '') }

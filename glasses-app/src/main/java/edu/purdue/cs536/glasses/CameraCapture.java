@@ -5,6 +5,7 @@ import android.hardware.Camera;
 import android.os.*;
 import android.view.SurfaceHolder;
 import edu.purdue.cs536.stream.Frame;
+import edu.purdue.cs536.stream.CapturePacer;
 import java.io.*;
 import java.util.*;
 
@@ -15,7 +16,12 @@ final class CameraCapture {
     interface Listener { void frame(Frame frame); void state(String text, boolean failure); }
     static final class Config {
         final int cameraId, width, height, fps, quality, rotation;
+        final boolean steadyPacing;
         Config(int cameraId, int width, int height, int fps, int quality, int rotation) {
+            this(cameraId,width,height,fps,quality,rotation,false);
+        }
+        Config(int cameraId, int width, int height, int fps, int quality, int rotation, boolean steadyPacing) {
+            this.steadyPacing=steadyPacing;
             this.cameraId=cameraId; this.width=width; this.height=height;
             this.fps=fps; this.quality=quality; this.rotation=rotation;
         }
@@ -48,11 +54,12 @@ final class CameraCapture {
                 for (int i = 0; i < 3; i++) camera.addCallbackBuffer(new byte[length]);
                 String session = UUID.randomUUID().toString();
                 long[] last = {0}, sequence = {0};
+                CapturePacer pacing = new CapturePacer(config.fps);
                 camera.setErrorCallback((error, ignored) -> { enabled = false; release(); listener.state("Camera error " + error + "; stop and restart", true); });
                 camera.setPreviewCallbackWithBuffer((data, source) -> {
                     long now = System.nanoTime();
                     try {
-                        if (enabled && now - last[0] >= 1_000_000_000L / config.fps) {
+                        if (enabled && (config.steadyPacing ? pacing.accept(now) : now - last[0] >= 1_000_000_000L / config.fps)) {
                             last[0] = now;
                             long wall = System.currentTimeMillis();
                             byte[] jpeg = encode(data, size.width, size.height, config.quality, config.rotation);
