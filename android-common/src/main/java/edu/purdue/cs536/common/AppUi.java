@@ -1,6 +1,7 @@
 package edu.purdue.cs536.common;
 
 import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
 import android.text.InputType;
@@ -71,7 +72,7 @@ public final class AppUi {
         } catch (SocketException e) { return "Network addresses unavailable"; }
         return result.isEmpty() ? "No IPv4 network address. Connect Wi-Fi or use adb forwarding." : android.text.TextUtils.join("\n", result);
     }
-    public static File traceFile(Activity a, String role) throws IOException {
+    public static File traceFile(Context a, String role) throws IOException {
         File base = a.getExternalFilesDir(null);
         if (base == null) base = a.getFilesDir();
         File directory = new File(base, "traces");

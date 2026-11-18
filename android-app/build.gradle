@@ -8,6 +8,7 @@ android {
         targetSdk 35
         versionCode 1
         versionName '0.1.0'
+        testInstrumentationRunner 'edu.purdue.cs536.phone.RelayLifecycleInstrumentation'
         manifestPlaceholders = [appLabel: project.hasProperty('cs536ApplicationIdSuffix') ? 'CS536 Receiver Live Test' : 'CS536 Receiver']
     }
     buildTypes {
