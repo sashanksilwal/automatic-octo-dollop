@@ -1,0 +1,69 @@
+{
+  "comparison": "Four physical 120-second runs in two counterbalanced pairs; same camera/model/network configuration",
+  "aggregates": {
+    "baseline": {
+      "runs": 2,
+      "measured_s": 240.010381083,
+      "capture_fps_mean_matched_interval": 7.449526219396102,
+      "receive_fps_pooled": 4.924786980739982,
+      "inference_fps_pooled": 4.7497945499522665,
+      "jpeg_payload_mbps": 0.8974636473141155,
+      "pipeline_ms_weighted_mean": 78.23018702370622,
+      "mean_of_run_local_receive_to_result_p95_ms": 172.07105420056905,
+      "pipeline_over_125_ms": 38,
+      "inferences": 1140,
+      "head_containing_inferences": 1126,
+      "receive_silences_over_500ms": 48,
+      "max_receive_silence_s": 4.525350208
+    },
+    "steady-pacing": {
+      "runs": 2,
+      "measured_s": 240.00608725,
+      "capture_fps_mean_matched_interval": 8.00012816829061,
+      "receive_fps_pooled": 7.378979509612417,
+      "inference_fps_pooled": 7.253982679974714,
+      "jpeg_payload_mbps": 1.4059351405054832,
+      "pipeline_ms_weighted_mean": 56.10951567381884,
+      "mean_of_run_local_receive_to_result_p95_ms": 152.07694512664602,
+      "pipeline_over_125_ms": 12,
+      "inferences": 1741,
+      "head_containing_inferences": 958,
+      "receive_silences_over_500ms": 11,
+      "max_receive_silence_s": 5.721325209
+    }
+  },
+  "workloads": [
+    {
+      "pair": 1,
+      "baseline_heads": 530,
+      "baseline_inferences": 544,
+      "steady_heads": 5,
+      "steady_inferences": 788,
+      "baseline_head_fraction": 0.9742647058823529,
+      "steady_head_fraction": 0.006345177664974619
+    },
+    {
+      "pair": 2,
+      "baseline_heads": 596,
+      "baseline_inferences": 596,
+      "steady_heads": 953,
+      "steady_inferences": 953,
+      "baseline_head_fraction": 1.0,
+      "steady_head_fraction": 1.0
+    }
+  ],
+  "mean_paired_differences": {
+    "source_capture_fps_matched_interval": 0.5506019488945073,
+    "actual_laptop_receive_fps": 2.454181835754482,
+    "actual_inference_fps": 2.504176127565533,
+    "laptop_payload_mbps": 0.5084705996954249,
+    "local_receive_to_result_p95_ms": -19.994109073923056
+  },
+  "limits": [
+    "Same configuration and duration; actual scene/head workload was not identical in pair 1.",
+    "Only two pairs on the same devices/session; no significance or independent-subject claim.",
+    "Observed delivery and latency differences combine pacing, changing workload and cellular/Cloudflare transport variation.",
+    "Local receive-to-result excludes camera capture, network transit and physical display.",
+    "Head-containing performance and accuracy require separate evaluation."
+  ]
+}

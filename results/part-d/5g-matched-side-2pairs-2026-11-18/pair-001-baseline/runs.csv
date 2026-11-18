@@ -1,0 +1,2 @@
+run_id,duration_s,laptop_received_frames,inferred_frames,actual_laptop_receive_fps,actual_inference_fps,actual_published_fps,head_containing_inferences,pipeline_over_125_ms,laptop_payload_mbps,source_capture_fps_matched_interval,laptop_silence_over_500_ms,laptop_max_silence_s,ping_failed_probes,protocol_deviation_samples
+run-001,120.005164,568,544,4.733129650987353,4.533138257283662,4.533138257283662,530,14,0.8528927638480625,7.422286755057557,30,1.577854291,0,0
