@@ -1,0 +1,16 @@
+{
+  "source_sha256": {
+    "Bonus-PartC/collect.py": "b2543c1a7e2da8cd52a06a7d06964878bc70d979c043337a9a5ad287e553709f",
+    "Bonus-PartC/analyze.py": "45384f377d977f454fa40e673621cafaaf41bf75241cdb5f3045e52705297de7",
+    "Bonus-PartC/verify.py": "cdde185d8e058b52ca16df73ae3da843b8edcb69ec5a0b9d4c67b5cb9c2d776d",
+    "Bonus-PartC/plot.py": "3218af87b043655c84d572ccdd2731db8ae4a873e003c1e205ab6189ed8e0d6b",
+    "Bonus-PartC/combine.py": "888d656af0c275c290b7cf29fd1a5c3f57cf4c0f0e89b20d06c6d252b53aa2ed",
+    "tools/cellular_bridge.py": "be327e7486c5e59a9e4ebb2c185d9e48b985a961d6a36049e823a17f42cea479",
+    "tools/java/CellularUpload.java": "8bfd85b0f65a77166cdc5e9941dabe46a6224bc45ef4dc29ec9e038d8f111b61"
+  },
+  "raw_verification": "data/raw/part-c/2026-11-18-5g-hotspot-stationary-attempt03/trace-verification.json",
+  "actual_verified_runs": 12,
+  "requested_total_runs": 16,
+  "supplemental_runs_pending": 4,
+  "full_part_c_validated": false
+}

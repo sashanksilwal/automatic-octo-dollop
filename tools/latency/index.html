@@ -1,0 +1,13 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Glasses-to-laptop delay check</title>
+<style>body{font:18px system-ui;margin:24px;color:#172b42}main{display:flex;gap:32px;align-items:start}h1{font-size:26px}h2{font-size:20px}section{background:#f4f6f8;padding:20px;border-radius:8px}#source{background:white;width:280px;height:280px}#video{width:min(57vw,800px);height:auto;background:#111}p{max-width:1050px;line-height:1.45}#clock{font:32px monospace;margin:12px 0}</style>
+<h1>Glasses-to-laptop delay check</h1><p>Point the glasses at the source clock and marker. Keep a person visible too when measuring gaze inference. Record both panels together using a separate camera; the Android relay app must stay open.</p>
+<main><section><h2>Source clock</h2><canvas id="source" width="280" height="280"></canvas><div id="clock">Starting…</div><small>Marker changes every 20 ms.</small></section>
+<section><h2>Laptop video</h2><canvas id="video" width="640" height="480"></canvas><p id="state">Waiting for annotated video</p></section></main>
+<script>
+const marker=document.querySelector('#source'),ctx=marker.getContext('2d'),video=document.querySelector('#video'),vc=video.getContext('2d'),clock=document.querySelector('#clock'),state=document.querySelector('#state');
+let dictionary,lastFrame=0;
+fetch('/dictionary').then(r=>r.json()).then(data=>{dictionary=data;requestAnimationFrame(tick)});
+function tick(now){const n=Math.floor(now/20),id=n%1000,bits=dictionary[id];ctx.fillStyle='white';ctx.fillRect(0,0,280,280);for(let y=0;y<6;y++)for(let x=0;x<6;x++){ctx.fillStyle=bits[y*6+x]?'white':'black';ctx.fillRect(20+x*40,20+y*40,40,40)}clock.textContent=(n*0.02).toFixed(2)+' s';requestAnimationFrame(tick)}
+async function receive(){while(true){try{const r=await fetch('/frame',{cache:'no-store'});if(r.status===200){const bitmap=await createImageBitmap(await r.blob());vc.drawImage(bitmap,0,0,640,480);bitmap.close();lastFrame=performance.now();state.textContent='Annotated frame: '+r.headers.get('X-Frame-Key')}else if(performance.now()-lastFrame>2500){vc.clearRect(0,0,640,480);state.textContent='Waiting for fresh annotated video'}}catch(e){if(performance.now()-lastFrame>2500){vc.clearRect(0,0,640,480);state.textContent='Connection unavailable'}}await new Promise(r=>setTimeout(r,80))}}
+receive();
+</script></html>

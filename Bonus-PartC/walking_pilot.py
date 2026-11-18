@@ -38,6 +38,8 @@ def main():
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--pairing-file',type=Path,required=True)
     p.add_argument('--viewer-log-dir',type=Path,required=True)
+    p.add_argument('--defer-device-export',action='store_true',
+        help='No wireless ADB/probes; retrieve both device traces after USB reconnection')
     a=p.parse_args();a.output.mkdir(parents=True,exist_ok=False)
     cfg=json.loads(a.pairing_file.read_text());phone=cfg['phone_ip']+':5555'
     status=c.api('/status');ai=c.api('/ai')
@@ -48,9 +50,10 @@ def main():
       'operator_confirmed_ready':True,'extrapolated':False,'independent_runs':1,'source_session_at_start':status['source_session'],
       'run_reset':'existing camera/relay session continues; no app restart','inference_settings':ai['settings'],
       'precision':ai.get('precision'),'phone_inference':False,'video_transport':'Wi-Fi through existing phone relay',
-      'control_transport':'phone wireless ADB; glasses USB absent during walking',
+      'control_transport':('USB for setup/export only; no ADB during walking' if a.defer_device_export else 'phone wireless ADB; glasses USB absent during walking'),
       'app_reference_batch':'data/raw/part-c/2026-11-04-pal30-stationary-attempt03/batch.json',
-      'glasses_trace_status':'pending retrieval after USB reconnection','phone_trace_status':'pending wireless export',
+      'glasses_trace_status':'pending retrieval after USB reconnection','phone_trace_status':('pending retrieval after USB reconnection' if a.defer_device_export else 'pending wireless export'),
+      'rtt_probe_policy':('Not measured: no wireless ADB; empty RTT file is not evidence of zero network failures' if a.defer_device_export else 'Phone-to-glasses ping every 20 seconds via wireless ADB'),
       'ground_truth_accuracy_available':False,'counts_as_ten_runs':False,'full_part_c_validated':False}
     (a.output/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     (a.output/'collector-pid.json').write_text(json.dumps({'pid':__import__('os').getpid()}))
@@ -65,7 +68,7 @@ def main():
                 try:sample['stream']=c.api('/status');sample['ai']=c.api('/ai')
                 except Exception as e:sample['error']=type(e).__name__
                 log.write(json.dumps(sample)+'\n');log.flush()
-                if elapsed>=probe_at:
+                if not a.defer_device_export and elapsed>=probe_at:
                     try:
                         r=subprocess.run([str(c.ADB),'-s',phone,'shell','ping','-c','1','-W','1',cfg['glasses_ip']],capture_output=True,text=True,timeout=3)
                         match=c.re.search(r'time[=<]([\d.]+)\s*ms',r.stdout)
@@ -81,10 +84,11 @@ def main():
         # Allow already-received work to finish before selecting the input cohort.
         time.sleep(2)
         manifest['source_files']=snapshot(a.viewer_log_dir,start,end,a.output)
-        try:
-            manifest['source_files']['phone']=c.latest_trace(phone,c.PP,'phone',a.output/'phone.csv')
-            manifest['phone_trace_status']='exported via wireless ADB after measurement'
-        except Exception as e:manifest['phone_trace_status']='export unavailable: '+type(e).__name__
+        if not a.defer_device_export:
+            try:
+                manifest['source_files']['phone']=c.latest_trace(phone,c.PP,'phone',a.output/'phone.csv')
+                manifest['phone_trace_status']='exported via wireless ADB after measurement'
+            except Exception as e:manifest['phone_trace_status']='export unavailable: '+type(e).__name__
         for name in ['laptop.csv','inference.jsonl','samples.jsonl','rtt.jsonl','phone.csv']:
             path=a.output/name
             if path.exists():

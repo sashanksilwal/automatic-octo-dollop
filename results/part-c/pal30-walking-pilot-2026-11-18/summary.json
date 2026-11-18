@@ -1,0 +1,188 @@
+{
+  "trial_kind": "one continuous physical walking pilot",
+  "scenario": "walking",
+  "network": "PAL3.0",
+  "independent_runs": 1,
+  "extrapolated": false,
+  "measured_duration_s": 300.005119917,
+  "received_frames": 1129,
+  "inferred_frames": 1128,
+  "published_frames": 1127,
+  "head_containing_inferences": 46,
+  "actual_receive_fps": 3.763269107915063,
+  "actual_inference_fps": 3.759935831468725,
+  "actual_published_fps": 3.7566025550223876,
+  "received_without_inference": 1,
+  "pipeline_ms": {
+    "n": 1128,
+    "mean": 23.789645538136995,
+    "p50": 22.020062500814674,
+    "p95": 27.79568750229336,
+    "max": 72.39208300597966
+  },
+  "head_pipeline_ms": {
+    "n": 46,
+    "mean": 63.711053390801204,
+    "p50": 62.81177099663182,
+    "p95": 70.43910375068663,
+    "max": 72.39208300597966
+  },
+  "worker_ms": {
+    "n": 1128,
+    "mean": 26.093216395230417,
+    "p50": 24.47295849924558,
+    "p95": 29.788606798319833,
+    "max": 74.93491599598201
+  },
+  "local_receive_to_result_ms": {
+    "n": 1128,
+    "mean": 35.14044787680951,
+    "p50": 25.29493700058083,
+    "p95": 90.79555615207926,
+    "max": 135.20900000003166
+  },
+  "pipeline_over_125_ms": 0,
+  "worker_over_125_ms": 0,
+  "payload_mbps": 0.9873092568618383,
+  "interarrival_ms": {
+    "n": 1128,
+    "mean": 265.8049922429078,
+    "p50": 133.0672495,
+    "p95": 203.08516249999994,
+    "max": 148990.028667
+  },
+  "max_receive_silence_s": 148.990028667,
+  "receive_silences_over_500_ms": 1,
+  "receive_silence_excess_s": 148.490028667,
+  "jitter_abs_deviation_from_median_ms": {
+    "n": 1128,
+    "mean": 154.48378065425533,
+    "p50": 9.903437499999995,
+    "p95": 79.69855859999998,
+    "max": 148856.96141750002
+  },
+  "ping_rtt_ms": {
+    "n": 0,
+    "mean": null,
+    "p50": null,
+    "p95": null,
+    "max": null
+  },
+  "ping_probes": 0,
+  "ping_failed_probes": 0,
+  "status_error_samples": 0,
+  "nonstreaming_status_samples": 146,
+  "source_sessions": [
+    "5d16365c-e554-473c-a4df-b4057aacf8de"
+  ],
+  "phone_trace_status": "exported over USB after measurement; original source files retained",
+  "glasses_trace_status": "exported over USB after measurement; original source files retained",
+  "full_part_c_validated": false,
+  "ground_truth_gaze_accuracy_available": false,
+  "limitations": [
+    "One five-minute run cannot establish hour-long reliability or replace ten separately collected runs.",
+    "Thirty-second plotting windows below are correlated segments of one pilot, not independent trials.",
+    "Inference throughput uses the received-frame cohort; final work can finish just after the window.",
+    "Local latency excludes glasses capture, phone/network transit and physical browser display.",
+    "No ground-truth gaze accuracy is inferred from detected heads or model scores.",
+    "Operator-reported walking pilot with an interruption and a near-laptop pause; not uninterrupted walking or continuous delivery. Exact path, distance and movement duration were not instrumented."
+  ],
+  "rtt_probe_policy": "Not measured: no wireless ADB; empty RTT file is not evidence of zero network failures",
+  "operator_observations": {
+    "observations": [
+      {
+        "approx_elapsed_s": 197,
+        "report": "Operator reported being close to laptop; phone preview frozen or showing error."
+      },
+      {
+        "approx_elapsed_s": 241,
+        "report": "Operator reported video working again; subsequent laptop status confirmed fresh streaming and running inference."
+      }
+    ],
+    "scope": "Operator-reported walking pilot with an interruption and a near-laptop pause; not uninterrupted walking or continuous delivery. Exact path, distance and movement duration were not instrumented.",
+    "root_cause": "Unestablished pending device-trace inspection. Do not infer network coverage or laptop distance alone as the cause."
+  },
+  "frame_envelope_metadata_verified_across_three_devices": true,
+  "receive_gap_episodes": [
+    {
+      "laptop_receive_gap_s": 148.990028667,
+      "previous_frame": [
+        "5d16365c-e554-473c-a4df-b4057aacf8de",
+        1338
+      ],
+      "next_frame": [
+        "5d16365c-e554-473c-a4df-b4057aacf8de",
+        2446
+      ],
+      "start_elapsed_s": 82.920303,
+      "glasses_frames_in_same_sequence_interval": 1109,
+      "glasses_max_local_receive_gap_s": 0.169680808,
+      "phone_frames_in_same_sequence_interval": 23,
+      "phone_max_local_receive_gap_s": 146.154523017,
+      "camera_sequence_span_inclusive": 1109,
+      "interpretation_limit": "Per-hop gap observations; these do not identify the Wi-Fi or application root cause."
+    }
+  ],
+  "correlated_30s_windows": [
+    {
+      "start_s": 0,
+      "duration_s": 30.0,
+      "received_fps": 7.466666666666667,
+      "inferred_fps": 7.466666666666667
+    },
+    {
+      "start_s": 30,
+      "duration_s": 30.0,
+      "received_fps": 7.466666666666667,
+      "inferred_fps": 7.466666666666667
+    },
+    {
+      "start_s": 60,
+      "duration_s": 30.0,
+      "received_fps": 5.733333333333333,
+      "inferred_fps": 5.733333333333333
+    },
+    {
+      "start_s": 90,
+      "duration_s": 30.0,
+      "received_fps": 0.0,
+      "inferred_fps": 0.0
+    },
+    {
+      "start_s": 120,
+      "duration_s": 30.0,
+      "received_fps": 0.0,
+      "inferred_fps": 0.0
+    },
+    {
+      "start_s": 150,
+      "duration_s": 30.0,
+      "received_fps": 0.0,
+      "inferred_fps": 0.0
+    },
+    {
+      "start_s": 180,
+      "duration_s": 30.0,
+      "received_fps": 0.0,
+      "inferred_fps": 0.0
+    },
+    {
+      "start_s": 210,
+      "duration_s": 30.0,
+      "received_fps": 2.033333333333333,
+      "inferred_fps": 2.0
+    },
+    {
+      "start_s": 240,
+      "duration_s": 30.0,
+      "received_fps": 7.466666666666667,
+      "inferred_fps": 7.466666666666667
+    },
+    {
+      "start_s": 270,
+      "duration_s": 30.0,
+      "received_fps": 7.466666666666667,
+      "inferred_fps": 7.466666666666667
+    }
+  ]
+}

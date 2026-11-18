@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Collect prospectively planned physical PAL3.0 trials, with a fresh camera session per run.
+"""Collect physical PAL3.0 or explicitly documented cellular-bridge trials.
 
 Uses the verified Android apps and the existing laptop viewer. Never stores account
 or pairing credentials in the experiment outputs. Ctrl+C retains the partial run.
@@ -50,7 +50,16 @@ def api(path,action=None):
 
 def click(serial,package,label):
     for attempt in range(7):
-        adb(serial,'shell','uiautomator','dump','/sdcard/cs536-trial-controls.xml')
+        try:
+            adb(serial,'shell','uiautomator','dump','/sdcard/cs536-trial-controls.xml')
+        except (subprocess.CalledProcessError, subprocess.TimeoutExpired):
+            if attempt==6:raise
+            # Device wake/reconnection can leave the vendor launcher foreground.
+            # Retry setup only; never reuse stale controls after a failed dump.
+            resolved=adb(serial,'shell','cmd','package','resolve-activity','--brief',package).decode().splitlines()
+            component=next((s.strip() for s in reversed(resolved) if s.strip().startswith(package+'/')),None)
+            if component:adb(serial,'shell','am','start','-n',component)
+            continue
         ui=ET.fromstring(adb(serial,'exec-out','cat','/sdcard/cs536-trial-controls.xml'))
         if not any(n.get('package')==package for n in ui.iter('node')):
             if attempt>=2:raise RuntimeError('Expected test app is not foreground: '+package)
@@ -86,22 +95,28 @@ def diagnostics(serial):
         match=re.search(pattern,battery);result[key]=int(match.group(1)) if match else None
     return result
 
-def latest_trace(serial,package,role,dest):
+def latest_trace(serial,package,role,dest,source=None):
     base=f'/sdcard/Android/data/{package}/files/traces'
     names=adb(serial,'shell','ls',base).decode().splitlines()
     names=sorted(n.strip() for n in names if n.startswith(role+'-') and n.endswith('.csv'))
     if not names:raise RuntimeError('No '+role+' trace')
-    data=adb(serial,'exec-out','cat',base+'/'+names[-1])
-    dest.write_bytes(data)
-    return names[-1]
+    for name in reversed(names):
+        data=adb(serial,'exec-out','cat',base+'/'+name)
+        if source:
+            rows=csv.DictReader(io.StringIO(data.decode()))
+            if not any(r.get('source_session')==source for r in rows):continue
+        dest.write_bytes(data)
+        return name
+    raise RuntimeError('No '+role+' trace matches the measured camera session')
 
 def sha(path):
     with path.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
 
 def code_snapshot():
     paths=[]
-    for directory in ['laptop-viewer','glasses-app/src','android-app/src','android-common/src','stream-core/src']:
+    for directory in ['laptop-viewer','glasses-app/src','android-app/src','android-common/src','stream-core/src','tools/java']:
         paths.extend(p for p in (ROOT/directory).rglob('*') if p.is_file() and p.suffix in ('.py','.java','.xml','.html'))
+    paths.extend([ROOT/'tools/cellular_bridge.py', Path(__file__)])
     return {str(p.relative_to(ROOT)):sha(p) for p in sorted(paths)}
 
 def snapshot_laptop(csv_path,jsonl_path,source,start,end,dest):
@@ -145,12 +160,25 @@ def main():
     p.add_argument('--phone-apk',type=Path,default=ROOT/'output/apk/live-test/cs536-phone-partb-debug.apk')
     p.add_argument('--variant',default='baseline',choices=['baseline','steady-pacing'])
     p.add_argument('--scenario',choices=['stationary','walking'],required=True)
+    p.add_argument('--network',choices=['PAL3.0','5G-hotspot-via-cloudflare'],default='PAL3.0')
+    p.add_argument('--expected-ssid',default='PAL3.0')
+    p.add_argument('--topology-file',type=Path)
+    p.add_argument('--bridge-trace',type=Path)
+    p.add_argument('--uploader-trace',default='/data/local/tmp/cs536-cellular-uploader.csv')
     p.add_argument('--runs',type=int,default=12)
     p.add_argument('--duration',type=float,default=120)
     p.add_argument('--pairing-file',type=Path,required=True)
     p.add_argument('--viewer-log-dir',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     args=p.parse_args()
+    topology=None
+    if args.network!='PAL3.0':
+        if not args.topology_file or not args.bridge_trace or args.expected_ssid=='PAL3.0':
+            p.error('Cellular runs require topology evidence, bridge trace and hotspot SSID')
+        topology=json.loads(args.topology_file.read_text())
+        if (not topology.get('cellular_generation_evidence') or topology.get('usb_video_forwarding') is not False
+                or topology.get('cloud_proxy_included_in_measurements') is not True):
+            p.error('Document cellular evidence and actual proxy/video route')
     GP,PP=args.glasses_package,args.phone_package
     GLASSES,PHONE=args.glasses_serial,args.phone_serial
     if not all(re.fullmatch(r"[a-zA-Z][a-zA-Z0-9_.]+",x) for x in (GP,PP)):p.error("Invalid application ID")
@@ -160,7 +188,7 @@ def main():
     csv_path=sorted(args.viewer_log_dir.glob('part-b-stream-*.csv'))[-1]
     jsonl_path=sorted(args.viewer_log_dir.glob('part-b-gaze-*.jsonl'))[-1]
     snapshot=code_snapshot()
-    manifest={'created_at':now(),'control_transport':args.control_transport,'trial_kind':args.trial_kind,'variant':args.variant,'scenario':args.scenario,'network':'PAL3.0','operator_confirmed_scenario':True,
+    manifest={'created_at':now(),'control_transport':args.control_transport,'trial_kind':args.trial_kind,'variant':args.variant,'scenario':args.scenario,'network':args.network,'operator_confirmed_scenario':True,
               'planned_runs':args.runs,'requested_duration_s':args.duration,'collection_kind':'prospective physical trials',
               'run_reset':'camera and phone relay stopped/restarted for every run; laptop viewer remains warm',
               'independence_limit':'same devices, operator and session; runs are not independent subjects',
@@ -174,19 +202,30 @@ def main():
               'latency_scope':'inference and local receive-to-result timings; no calibrated cross-device one-way/display latency',
               'ground_truth_accuracy_available':False,'stall_definition_s':.5,
               'forwarding':subprocess.check_output([str(ADB),'forward','--list'],text=True).splitlines()}
+    if topology:
+        manifest['topology']=topology
+        manifest['expected_ssid']=args.expected_ssid
     (args.output/'batch.json').write_text(json.dumps(manifest,indent=2)+'\n')
     (args.output/'collector-pid.json').write_text(json.dumps({'pid':os.getpid(),'output':str(args.output),'started_at':now()}))
     completed=[]
-    print('PAL3.0 batch prepared: '+str(args.output),flush=True)
+    print(args.network+' batch prepared: '+str(args.output),flush=True)
     try:
         for index in range(1,args.runs+1):
             if STOP:break
             folder=args.output/f'run-{index:03d}';folder.mkdir()
-            run={'run_id':folder.name,'variant':args.variant,'scenario':args.scenario,'network':'PAL3.0','started_at':now(),'status':'setting_up'}
+            run={'run_id':folder.name,'variant':args.variant,'scenario':args.scenario,'network':args.network,'started_at':now(),'status':'setting_up'}
             (folder/'manifest.json').write_text(json.dumps(run,indent=2)+'\n')
             gl,ph=diagnostics(GLASSES),diagnostics(PHONE)
             run['device_start']={'glasses':gl,'phone':ph}
-            if gl['ssid']!='PAL3.0' or ph['ssid']!='PAL3.0':raise RuntimeError('Both devices must remain on PAL3.0')
+            if gl['ssid']!=args.expected_ssid or ph['ssid']!=args.expected_ssid:
+                raise RuntimeError('Both devices must remain on '+args.expected_ssid)
+            if topology:
+                route=subprocess.check_output(['route','-n','get','default'],text=True)
+                if 'gateway: 10.186.' not in route:
+                    raise RuntimeError('Laptop campus route changed; verify cellular topology before continuing')
+                run['laptop_default_route']=route
+                run['phone_routes']=adb(PHONE,'shell','ip','route','show','table','all').decode()
+                run['topology']=topology
             api('/ai/control',{'action':'pause'})
             click(PHONE,PP,'Stop');click(GLASSES,GP,'Stop')
             previous=api('/status')['source_session']
@@ -228,18 +267,34 @@ def main():
                         last_report=marker;print(f'RUN {index}: {elapsed:.0f}/{args.duration:g}s; stream={sample.get("stream",{}).get("state","unavailable")}',flush=True)
                     time.sleep(min(1,max(0,args.duration-(time.monotonic()-started))))
             end_ns=time.monotonic_ns();duration=(end_ns-start_ns)/1e9
+            # Persist the measured boundary before UI controls or USB export can
+            # fail. An export-pending run is not counted as complete.
+            run.update(measurement_end_mono_ns=end_ns,measured_duration_s=duration,
+                       finished_at=now(),status='interrupted' if STOP else 'export_pending')
+            (folder/'manifest.json').write_text(json.dumps(run,indent=2)+'\n')
+            time.sleep(1.25)  # Drain the local logs' periodic flush, outside the measured window.
             api('/ai/control',{'action':'pause'})
+            snapshot_laptop(csv_path,jsonl_path,source,start_ns,end_ns,folder)
             click(PHONE,PP,'Stop');click(GLASSES,GP,'Stop')
             run.update(measurement_end_mono_ns=end_ns,measured_duration_s=duration,finished_at=now(),status='interrupted' if STOP else 'complete')
             run['source_files']={
-                'glasses':latest_trace(GLASSES,GP,'glasses',folder/'glasses.csv'),
-                'phone':latest_trace(PHONE,PP,'phone',folder/'phone.csv')}
+                'glasses':latest_trace(GLASSES,GP,'glasses',folder/'glasses.csv',source),
+                'phone':latest_trace(PHONE,PP,'phone',folder/'phone.csv',source)}
             if args.variant=='steady-pacing':
                 with (folder/'glasses.csv').open(newline='') as f:
                     configs=[r['detail'] for r in csv.DictReader(f) if r['event']=='config']
                 if not any('pacing=absolute' in r for r in configs):raise RuntimeError('Enhanced run did not enable absolute pacing')
-            snapshot_laptop(csv_path,jsonl_path,source,start_ns,end_ns,folder)
             run['device_end']={'glasses':diagnostics(GLASSES),'phone':diagnostics(PHONE)}
+            if topology:
+                # Extra hops remain in their own clock domains; preserve session rows.
+                uploader=adb(PHONE,'exec-out','cat',args.uploader_trace).decode()
+                for name,data in [('phone-uploader.csv',uploader),('bridge.csv',args.bridge_trace.read_text())]:
+                    reader=csv.DictReader(io.StringIO(data))
+                    with (folder/name).open('w',newline='') as out:
+                        writer=csv.DictWriter(out,fieldnames=reader.fieldnames);writer.writeheader()
+                        for row in reader:
+                            if row.get('source_session')==source:writer.writerow(row)
+                run['transport_limits']='Includes hotspot Wi-Fi, iPhone cellular and Cloudflare tunnel; not isolated 5G radio performance. 5G indicator is operator-observed, not modem telemetry.'
             (folder/'manifest.json').write_text(json.dumps(run,indent=2)+'\n')
             completed.append({'run_id':folder.name,'status':run['status'],'duration_s':duration})
             (args.output/'progress.json').write_text(json.dumps({'updated_at':now(),'completed':completed,'planned':args.runs,'stopped':STOP},indent=2)+'\n')

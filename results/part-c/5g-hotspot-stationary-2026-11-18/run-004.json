@@ -1,0 +1,205 @@
+{
+  "variant": "baseline",
+  "run_id": "run-004",
+  "network": "5G-hotspot-via-cloudflare",
+  "scenario": "stationary",
+  "duration_s": 120.003563625,
+  "source_session": "225534cd-4583-4bef-a688-db36dd0d98a4",
+  "status": "complete",
+  "laptop_received_frames": 892,
+  "inferred_frames": 875,
+  "published_frames": 875,
+  "actual_laptop_receive_fps": 7.433112593117794,
+  "actual_inference_fps": 7.291450133383487,
+  "actual_published_fps": 7.291450133383487,
+  "received_without_inference": 17,
+  "head_containing_inferences": 875,
+  "pipeline_ms": {
+    "n": 875,
+    "mean": 75.90605476794632,
+    "p50": 70.27254199783783,
+    "p95": 110.32683739831555,
+    "max": 210.57500000461005
+  },
+  "head_pipeline_ms": {
+    "n": 875,
+    "mean": 75.90605476794632,
+    "p50": 70.27254199783783,
+    "p95": 110.32683739831555,
+    "max": 210.57500000461005
+  },
+  "pipeline_over_125_ms": 18,
+  "pipeline_over_125_fraction": 0.02057142857142857,
+  "detection_ms": {
+    "n": 875,
+    "mean": 24.52026409586792,
+    "p50": 22.810292000940535,
+    "p95": 34.58892079797805,
+    "max": 83.37387500068871
+  },
+  "gaze_and_overlay_ms": {
+    "n": 875,
+    "mean": 51.38579067207839,
+    "p50": 47.55354200460715,
+    "p95": 73.17942499939817,
+    "max": 158.8565420024679
+  },
+  "local_receive_to_result_ms": {
+    "n": 875,
+    "mean": 94.07213338617501,
+    "p50": 78.87966700218385,
+    "p95": 160.508733298775,
+    "max": 309.9258330039447
+  },
+  "worker_ms": {
+    "n": 875,
+    "mean": 77.74119333137891,
+    "p50": 72.06879199657124,
+    "p95": 112.49427139919135,
+    "max": 213.66129200032447
+  },
+  "worker_over_125_ms": 22,
+  "laptop_interarrival_ms": {
+    "n": 891,
+    "mean": 134.63420650953984,
+    "p50": 131.044958,
+    "p95": 213.042521,
+    "max": 686.215625
+  },
+  "laptop_jitter_abs_deviation_from_median_ms": {
+    "n": 891,
+    "mean": 34.769203261503925,
+    "p50": 24.966667,
+    "p95": 93.6250625,
+    "max": 555.1706670000001
+  },
+  "laptop_silence_over_500_ms": 1,
+  "laptop_silence_excess_s": 0.186215625,
+  "laptop_max_silence_s": 0.686215625,
+  "phone_to_glasses_ping_rtt_ms": {
+    "n": 6,
+    "mean": 8.081666666666667,
+    "p50": 8.05,
+    "p95": 8.8775,
+    "max": 9.11
+  },
+  "ping_probes": 6,
+  "ping_failed_probes": 0,
+  "status_samples": 119,
+  "status_error_samples": 0,
+  "nonstreaming_status_samples": 0,
+  "protocol_deviation_samples": 0,
+  "source_sequence_interval": [
+    80,
+    975
+  ],
+  "source_generated_in_matched_interval": 896,
+  "source_capture_fps_matched_interval": 7.465933695084213,
+  "phone_receive_fps_matched_interval": 7.466481208354472,
+  "source_frames_missing_at_phone_in_matched_interval": 0,
+  "phone_frames_missing_at_laptop_in_matched_interval": 4,
+  "laptop_payload_mbps": 1.3186343073484708,
+  "phone_payload_mbps_matched_interval": 1.3260688196797221,
+  "device_start": {
+    "glasses": {
+      "ssid": "IPhone-sashank",
+      "rssi_dbm": -46,
+      "frequency_mhz": 5745,
+      "link_speed_mbps": 390,
+      "battery_percent": 30,
+      "temperature_tenths_c": 266
+    },
+    "phone": {
+      "ssid": "IPhone-sashank",
+      "rssi_dbm": -35,
+      "frequency_mhz": 5745,
+      "link_speed_mbps": 1200,
+      "battery_percent": 100,
+      "temperature_tenths_c": 274
+    }
+  },
+  "device_end": {
+    "glasses": {
+      "ssid": "IPhone-sashank",
+      "rssi_dbm": -46,
+      "frequency_mhz": 5745,
+      "link_speed_mbps": 390,
+      "battery_percent": 28,
+      "temperature_tenths_c": 271
+    },
+    "phone": {
+      "ssid": "IPhone-sashank",
+      "rssi_dbm": -39,
+      "frequency_mhz": 5745,
+      "link_speed_mbps": 1200,
+      "battery_percent": 100,
+      "temperature_tenths_c": 276
+    }
+  },
+  "limitations": [
+    "payload throughput excludes HTTP/TCP/Wi-Fi overhead; not link capacity",
+    "ping is phone-to-glasses RTT, not one-way video latency",
+    "local receive-to-result excludes camera, relay, network and browser display",
+    "received_without_inference includes intentional cadence/buffer drops and window boundaries",
+    "no ground-truth gaze accuracy or independent-subject claim",
+    "inference throughput uses frames received in the window; a result may finish just after its boundary",
+    "Phone display timing ends at the logged UI callback, not a calibrated physical screen event.",
+    "Cellular condition includes hotspot WLAN, Internet and Cloudflare proxy overhead.",
+    "5G indicator was operator-observed; no continuous iPhone modem telemetry.",
+    "A WSS write return is not a remote receipt acknowledgment or one-way network latency."
+  ],
+  "glasses_frame_sent_unique_frames_matched_interval": 896,
+  "glasses_frame_sent_fps_matched_interval": 7.466625715711266,
+  "glasses_frame_sent_payload_mbps_matched_interval": 1.3260944846073786,
+  "phone_frame_sent_unique_frames_matched_interval": 896,
+  "phone_frame_sent_fps_matched_interval": 7.4664801377996,
+  "phone_frame_sent_payload_mbps_matched_interval": 1.3260686295460575,
+  "phone_frame_displayed_unique_frames_matched_interval": 896,
+  "phone_frame_displayed_fps_matched_interval": 7.466608285778726,
+  "phone_frame_displayed_payload_mbps_matched_interval": 1.326091389000569,
+  "phone_local_receive_to_display_callback_ms": {
+    "n": 896,
+    "mean": 68.08217569977678,
+    "p50": 69.62489550000001,
+    "p95": 114.47803350000001,
+    "max": 123.306979
+  },
+  "topology": {
+    "created_date": "2026-11-18",
+    "glasses_ip": "172.20.10.4",
+    "phone_ip": "172.20.10.3",
+    "hotspot_ssid": "IPhone-sashank",
+    "network": "cellular-hotspot",
+    "cellular_generation_evidence": "operator confirms iPhone Wi-Fi off and 5G indicator visible",
+    "topology": "glasses --hotspot WLAN--> Android relay --hotspot/iPhone cellular uplink--> Cloudflare HTTPS tunnel --> laptop on PAL3.0",
+    "cloudflared_version": "2026.11.1",
+    "cloudflared_sha256": "1cd7041838e5b0943378763ca86ddc0af896d1727875f36b29f5cc35eb2c4df7",
+    "inference": "laptop only",
+    "cloud_proxy_included_in_measurements": true,
+    "usb_video_forwarding": false,
+    "transport": "TLS-verified authenticated WebSocket; latest-frame phone transport; Cloudflare proxy included",
+    "tunnel_hostname": "https://pipeline-greg-alerts-collins.trycloudflare.com",
+    "uploader_dex_sha256": "693e88fbe78954d9e0c11e4044a20a6dfabd61e902cc521391534a4940524d0f",
+    "cellular_confirmation": "Operator confirmed iPhone Wi-Fi off and 5G indicator visible in this chat before collection",
+    "stationary_instruction": "Devices remain stationary and powered; physical location not independently identified",
+    "limitations": "No iPhone modem telemetry; carrier generation is operator-observed; transport includes WLAN and Cloudflare, not isolated 5G radio",
+    "resumed_after_charging": true
+  },
+  "transport_limits": "Includes hotspot Wi-Fi, iPhone cellular and Cloudflare tunnel; not isolated 5G radio performance. 5G indicator is operator-observed, not modem telemetry.",
+  "phone_frames_missing_at_bridge_in_matched_interval": 0,
+  "bridge_frames_missing_at_laptop_in_matched_interval": 4,
+  "phone_receive_to_wss_write_return_ms": {
+    "n": 896,
+    "mean": 8.493346591517858,
+    "p50": 8.1197135,
+    "p95": 13.227396,
+    "max": 27.572083
+  },
+  "laptop_bridge_to_viewer_receive_ms": {
+    "n": 892,
+    "mean": 0.38680659304932735,
+    "p50": 0.327562,
+    "p95": 0.5380354499999997,
+    "max": 13.767459
+  }
+}

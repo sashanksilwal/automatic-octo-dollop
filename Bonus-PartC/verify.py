@@ -11,7 +11,9 @@ for folder in sorted(a.batch.glob('run-*')):
  if m.get('status')!='complete':report['excluded_runs'].append(folder.name);continue
  source=m['source_session'];assert source not in seen,'Camera session reused across runs';seen.add(source)
  by_role={};hashes={}
- for role in ['glasses','phone','laptop']:
+ roles=['glasses','phone','laptop']
+ if m.get('topology'):roles+=['phone-uploader','bridge']
+ for role in roles:
   path=folder/(role+'.csv')
   with path.open(newline='') as f:rows=list(csv.DictReader(f))
   assert all(None not in r for r in rows),f'{path}: malformed CSV fields'
@@ -22,7 +24,7 @@ for folder in sorted(a.batch.glob('run-*')):
   assert all(int(b['local_mono_ns'])>=int(x['local_mono_ns']) for x,b in zip(valid,valid[1:])),f'{path}: receive clock reversed'
   by_role[role]={int(r['sequence']):r for r in valid}
  for seq,r in by_role['laptop'].items():
-  for role in ['glasses','phone']:
+  for role in [r for r in roles if r!='laptop']:
    assert seq in by_role[role],f'{folder}: missing earlier-hop record for laptop sequence {seq}'
    for key in ['capture_mono_ns','capture_unix_ms','jpeg_bytes','width','height']:
     assert r[key]==by_role[role][seq][key],f'{folder}: relay altered {key}'
@@ -31,8 +33,10 @@ for folder in sorted(a.batch.glob('run-*')):
  with (folder/'inference.jsonl').open() as f:
   for line in f:
    r=json.loads(line);assert r['source_session']==source and r['sequence'] in by_role['laptop'];predictions+=1
- for filename in ['manifest.json','glasses.csv','phone.csv','laptop.csv','inference.jsonl','samples.jsonl','rtt.jsonl']:
+ filenames=['manifest.json','glasses.csv','phone.csv','laptop.csv','inference.jsonl','samples.jsonl','rtt.jsonl']
+ if m.get('topology'):filenames+=['phone-uploader.csv','bridge.csv']
+ for filename in filenames:
   with (folder/filename).open('rb') as f:hashes[filename]=hashlib.file_digest(f,'sha256').hexdigest()
- report['complete_runs'].append({'run_id':folder.name,'laptop_frames':len(by_role['laptop']),'inferences':predictions,'sha256':hashes})
+ report['complete_runs'].append({'run_id':folder.name,'verified_hops':roles,'laptop_frames':len(by_role['laptop']),'inferences':predictions,'sha256':hashes})
 (a.batch/'trace-verification.json').write_text(json.dumps(report,indent=2)+'\n')
 print(f"Verified {len(report['complete_runs'])} complete runs; frame envelope metadata preserved through all three devices.")

@@ -1,0 +1,314 @@
+{
+  "dataset": "VideoAttentionTarget",
+  "split": "official test",
+  "frames": 500,
+  "shows": 10,
+  "clips": 121,
+  "selection": "Uniform sampling without replacement of unique annotated test frames within each of the 10 official test shows. All labeled tracks on selected frames retained. No outcome-based filtering.",
+  "selection_sha256": "24cf1e96453b1b94d7f6c3ab324c17cd4640fdcdee3b360c1dcebf1fe5fd7f85",
+  "input_hashes_sha256": "11ab97353fe83a7e3ea98c4672688e6b7944bed0fd62a5ba0b5267874a3a0ad9",
+  "settings": {
+    "scene_size_pixels": 224,
+    "precision": "float32",
+    "max_heads": 4,
+    "confidence": 0.6,
+    "inout_threshold": 0.8,
+    "match_iou": 0.5,
+    "ground_truth_boxes_as_model_input": false
+  },
+  "device": "mps",
+  "model_sha256": "30f340477ec5c7f5cc48e905b2f35565b3714e29dda03956d3b6d9a77421d31f",
+  "detector_sha256": "2e220dee5fe94145c20eab2679bc94f6987e4a736e71fbbb703b111c7d3dfcee",
+  "engine_source_sha256": "9bf630b30105e0f8a85ac7699e14c094422727cbaae6f83ca61dd11b9f90ab5f",
+  "evaluator_sha256": "a5d96459ed8fe16abd71a1b00269c9023b9e93dba82a325a91d1ba966dbbfc8c",
+  "python": "3.12.14",
+  "warmup_and_loading_s": 7.7640669160027755,
+  "evaluation_wall_s": 67.31029116700665,
+  "actual_offline_frames_per_s": 7.428284610438351,
+  "pipeline_ms": {
+    "n": 500,
+    "mean": 121.60268821002683,
+    "median": 117.87058350091684,
+    "p95": 150.90216669705111,
+    "max": 493.05758400441846
+  },
+  "metrics": {
+    "person_labels": 1197,
+    "in_frame_labels": 777,
+    "out_of_frame_labels": 420,
+    "matched_heads": 1101,
+    "head_detection_recall": 0.9197994987468672,
+    "conditional_inout_accuracy": 0.7674841053587648,
+    "conditional_inout_balanced_accuracy": 0.7040398829797758,
+    "conditional_inout_class_recalls": {
+      "False": 0.4572127139364303,
+      "True": 0.9508670520231214
+    },
+    "conditional_in_frame_average_precision": 0.8867139499308592,
+    "all_label_detection_and_inout_success": 0.7059314954051796,
+    "conditional_in_frame_normalized_l2": {
+      "n": 692,
+      "mean": 0.12250981158367036,
+      "median": 0.0674776510748844,
+      "p95": 0.4297721006804925,
+      "max": 0.7546835683013797
+    },
+    "joint_in_frame_success_at_0_1": 0.5521235521235521,
+    "joint_in_frame_success_at_0_2": 0.6821106821106822
+  },
+  "per_show": {
+    "CBS This Morning": {
+      "person_labels": 171,
+      "in_frame_labels": 132,
+      "out_of_frame_labels": 39,
+      "matched_heads": 149,
+      "head_detection_recall": 0.8713450292397661,
+      "conditional_inout_accuracy": 0.8322147651006712,
+      "conditional_inout_balanced_accuracy": 0.6622418879056047,
+      "conditional_inout_class_recalls": {
+        "False": 0.3333333333333333,
+        "True": 0.9911504424778761
+      },
+      "conditional_in_frame_average_precision": 0.9216218541580288,
+      "all_label_detection_and_inout_success": 0.7251461988304093,
+      "conditional_in_frame_normalized_l2": {
+        "n": 113,
+        "mean": 0.0989921358841512,
+        "median": 0.05778349961280837,
+        "p95": 0.34701320336708513,
+        "max": 0.4984622755355015
+      },
+      "joint_in_frame_success_at_0_1": 0.6363636363636364,
+      "joint_in_frame_success_at_0_2": 0.7272727272727273
+    },
+    "Downton Abby": {
+      "person_labels": 124,
+      "in_frame_labels": 81,
+      "out_of_frame_labels": 43,
+      "matched_heads": 88,
+      "head_detection_recall": 0.7096774193548387,
+      "conditional_inout_accuracy": 0.7159090909090909,
+      "conditional_inout_balanced_accuracy": 0.6658717541070482,
+      "conditional_inout_class_recalls": {
+        "False": 0.35135135135135137,
+        "True": 0.9803921568627451
+      },
+      "conditional_in_frame_average_precision": 0.8715632445446628,
+      "all_label_detection_and_inout_success": 0.5080645161290323,
+      "conditional_in_frame_normalized_l2": {
+        "n": 51,
+        "mean": 0.14505503462468677,
+        "median": 0.07072602165319981,
+        "p95": 0.6581244361242046,
+        "max": 0.7167390103242675
+      },
+      "joint_in_frame_success_at_0_1": 0.41975308641975306,
+      "joint_in_frame_success_at_0_2": 0.49382716049382713
+    },
+    "Hell's Kitchen": {
+      "person_labels": 101,
+      "in_frame_labels": 88,
+      "out_of_frame_labels": 13,
+      "matched_heads": 97,
+      "head_detection_recall": 0.9603960396039604,
+      "conditional_inout_accuracy": 0.8969072164948454,
+      "conditional_inout_balanced_accuracy": 0.6153846153846154,
+      "conditional_inout_class_recalls": {
+        "False": 0.23076923076923078,
+        "True": 1.0
+      },
+      "conditional_in_frame_average_precision": 0.9731757629607225,
+      "all_label_detection_and_inout_success": 0.8613861386138614,
+      "conditional_in_frame_normalized_l2": {
+        "n": 84,
+        "mean": 0.132078459067509,
+        "median": 0.09439829057392518,
+        "p95": 0.381279538055123,
+        "max": 0.4720463523734322
+      },
+      "joint_in_frame_success_at_0_1": 0.5113636363636364,
+      "joint_in_frame_success_at_0_2": 0.7613636363636364
+    },
+    "I Wanna Marry Harry": {
+      "person_labels": 104,
+      "in_frame_labels": 44,
+      "out_of_frame_labels": 60,
+      "matched_heads": 104,
+      "head_detection_recall": 1.0,
+      "conditional_inout_accuracy": 0.7115384615384616,
+      "conditional_inout_balanced_accuracy": 0.7106060606060607,
+      "conditional_inout_class_recalls": {
+        "False": 0.7166666666666667,
+        "True": 0.7045454545454546
+      },
+      "conditional_in_frame_average_precision": 0.8318485702210138,
+      "all_label_detection_and_inout_success": 0.7115384615384616,
+      "conditional_in_frame_normalized_l2": {
+        "n": 44,
+        "mean": 0.11669948755244129,
+        "median": 0.06382198098710888,
+        "p95": 0.3274045168152255,
+        "max": 0.5222647892445621
+      },
+      "joint_in_frame_success_at_0_1": 0.4090909090909091,
+      "joint_in_frame_success_at_0_2": 0.6136363636363636
+    },
+    "It's Always Sunny in Philadelphia": {
+      "person_labels": 122,
+      "in_frame_labels": 69,
+      "out_of_frame_labels": 53,
+      "matched_heads": 119,
+      "head_detection_recall": 0.9754098360655737,
+      "conditional_inout_accuracy": 0.7478991596638656,
+      "conditional_inout_balanced_accuracy": 0.7225557461406518,
+      "conditional_inout_class_recalls": {
+        "False": 0.49056603773584906,
+        "True": 0.9545454545454546
+      },
+      "conditional_in_frame_average_precision": 0.8693934191142032,
+      "all_label_detection_and_inout_success": 0.7295081967213115,
+      "conditional_in_frame_normalized_l2": {
+        "n": 66,
+        "mean": 0.12064608516681773,
+        "median": 0.06835610819780882,
+        "p95": 0.5398276691293583,
+        "max": 0.5696837710577322
+      },
+      "joint_in_frame_success_at_0_1": 0.5652173913043478,
+      "joint_in_frame_success_at_0_2": 0.7681159420289855
+    },
+    "Jamie Oliver": {
+      "person_labels": 100,
+      "in_frame_labels": 72,
+      "out_of_frame_labels": 28,
+      "matched_heads": 100,
+      "head_detection_recall": 1.0,
+      "conditional_inout_accuracy": 0.85,
+      "conditional_inout_balanced_accuracy": 0.7321428571428572,
+      "conditional_inout_class_recalls": {
+        "False": 0.4642857142857143,
+        "True": 1.0
+      },
+      "conditional_in_frame_average_precision": 0.9494416179754577,
+      "all_label_detection_and_inout_success": 0.85,
+      "conditional_in_frame_normalized_l2": {
+        "n": 72,
+        "mean": 0.12206161178824058,
+        "median": 0.04652808808286346,
+        "p95": 0.6048348300380351,
+        "max": 0.7299784873967959
+      },
+      "joint_in_frame_success_at_0_1": 0.75,
+      "joint_in_frame_success_at_0_2": 0.8055555555555556
+    },
+    "MLB Interview": {
+      "person_labels": 166,
+      "in_frame_labels": 95,
+      "out_of_frame_labels": 71,
+      "matched_heads": 166,
+      "head_detection_recall": 1.0,
+      "conditional_inout_accuracy": 0.608433734939759,
+      "conditional_inout_balanced_accuracy": 0.5422535211267605,
+      "conditional_inout_class_recalls": {
+        "False": 0.08450704225352113,
+        "True": 1.0
+      },
+      "conditional_in_frame_average_precision": 0.6686487056984798,
+      "all_label_detection_and_inout_success": 0.608433734939759,
+      "conditional_in_frame_normalized_l2": {
+        "n": 95,
+        "mean": 0.11608040754305898,
+        "median": 0.06744629672371812,
+        "p95": 0.3426844534971227,
+        "max": 0.3825420770254257
+      },
+      "joint_in_frame_success_at_0_1": 0.6526315789473685,
+      "joint_in_frame_success_at_0_2": 0.7578947368421053
+    },
+    "Survivor": {
+      "person_labels": 121,
+      "in_frame_labels": 82,
+      "out_of_frame_labels": 39,
+      "matched_heads": 104,
+      "head_detection_recall": 0.859504132231405,
+      "conditional_inout_accuracy": 0.8557692307692307,
+      "conditional_inout_balanced_accuracy": 0.8128205128205128,
+      "conditional_inout_class_recalls": {
+        "False": 0.6410256410256411,
+        "True": 0.9846153846153847
+      },
+      "conditional_in_frame_average_precision": 0.946519660331364,
+      "all_label_detection_and_inout_success": 0.7355371900826446,
+      "conditional_in_frame_normalized_l2": {
+        "n": 65,
+        "mean": 0.1368750705991511,
+        "median": 0.09939963886504208,
+        "p95": 0.3731050344268084,
+        "max": 0.4495799758739152
+      },
+      "joint_in_frame_success_at_0_1": 0.3902439024390244,
+      "joint_in_frame_success_at_0_2": 0.573170731707317
+    },
+    "Titanic": {
+      "person_labels": 99,
+      "in_frame_labels": 62,
+      "out_of_frame_labels": 37,
+      "matched_heads": 85,
+      "head_detection_recall": 0.8585858585858586,
+      "conditional_inout_accuracy": 0.7294117647058823,
+      "conditional_inout_balanced_accuracy": 0.71,
+      "conditional_inout_class_recalls": {
+        "False": 0.6,
+        "True": 0.82
+      },
+      "conditional_in_frame_average_precision": 0.8484463874225374,
+      "all_label_detection_and_inout_success": 0.6262626262626263,
+      "conditional_in_frame_normalized_l2": {
+        "n": 50,
+        "mean": 0.14292344732614004,
+        "median": 0.07209683721858776,
+        "p95": 0.548661220255603,
+        "max": 0.7546835683013797
+      },
+      "joint_in_frame_success_at_0_1": 0.4032258064516129,
+      "joint_in_frame_success_at_0_2": 0.5161290322580645
+    },
+    "West World": {
+      "person_labels": 89,
+      "in_frame_labels": 52,
+      "out_of_frame_labels": 37,
+      "matched_heads": 89,
+      "head_detection_recall": 1.0,
+      "conditional_inout_accuracy": 0.797752808988764,
+      "conditional_inout_balanced_accuracy": 0.7801455301455301,
+      "conditional_inout_class_recalls": {
+        "False": 0.6756756756756757,
+        "True": 0.8846153846153846
+      },
+      "conditional_in_frame_average_precision": 0.9244919501360137,
+      "all_label_detection_and_inout_success": 0.797752808988764,
+      "conditional_in_frame_normalized_l2": {
+        "n": 52,
+        "mean": 0.11811029114515148,
+        "median": 0.05282994320342283,
+        "p95": 0.5927572945880096,
+        "max": 0.6093542503985517
+      },
+      "joint_in_frame_success_at_0_1": 0.6923076923076923,
+      "joint_in_frame_success_at_0_2": 0.7307692307692307
+    }
+  },
+  "limitations": [
+    "Fixed subset, not full official test benchmark.",
+    "Third-person TV video differs from glasses footage.",
+    "Adjacent frames and tracks may correlate; no independent-subject confidence claim.",
+    "Checkpoint was trained on the training portion of VSGaze including VAT; evaluation uses only original official test-show labels.",
+    "Conditional accuracy/distance exclude unmatched heads; joint success includes missing heads as failures.",
+    "Only annotated people are scored; unannotated detected people cannot be counted as false positives.",
+    "No threshold tuning, model updates, or test-driven resolution selection.",
+    "Peak L2 is measured for matched ground-truth in-frame cases even if predicted out; joint success also requires predicted in-frame.",
+    "Normalized L2 uses x/image-width and y/image-height, not pixels, degrees or fraction of diagonal.",
+    "Raw annotation boxes are unsmoothed; matching differs from official ground-truth-box model evaluation.",
+    "Frames are sparse accuracy samples, not an 8 fps playback or live throughput trial."
+  ]
+}

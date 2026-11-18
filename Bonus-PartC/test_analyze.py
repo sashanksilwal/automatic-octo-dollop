@@ -47,6 +47,24 @@ class AnalysisTests(unittest.TestCase):
             self.assertEqual(result['laptop_max_silence_s'],1.7)
             self.assertEqual(result['ping_failed_probes'],1)
             self.assertEqual(result['local_receive_to_result_ms']['mean'],150)
+            # Extra bridge hops must still use same-device clocks, despite the
+            # deliberately unrelated 800-second phone and laptop clock offsets.
+            manifest=json.loads((p/'manifest.json').read_text())
+            manifest.update(topology={'transport':'test WSS'},network='5G-hotspot-via-cloudflare')
+            (p/'manifest.json').write_text(json.dumps(manifest))
+            for input_role,output_role,event,shift in [
+                    ('phone','phone-uploader','frame_uploaded',5_000_000),
+                    ('laptop','bridge','frame_received',-2_000_000)]:
+                with (p/(input_role+'.csv')).open(newline='') as f:rows=list(csv.DictReader(f))
+                with (p/(output_role+'.csv')).open('w',newline='') as f:
+                    w=csv.DictWriter(f,fieldnames=fields);w.writeheader()
+                    for row in rows:
+                        row.update(event=event,local_mono_ns=int(row['local_mono_ns'])+shift)
+                        w.writerow(row)
+            cellular=a.analyze_run(p)
+            self.assertEqual(cellular['phone_receive_to_wss_write_return_ms']['mean'],5)
+            self.assertEqual(cellular['laptop_bridge_to_viewer_receive_ms']['mean'],2)
+            self.assertEqual(cellular['phone_frames_missing_at_bridge_in_matched_interval'],0)
 
     def test_incomplete_run_excluded(self):
         with tempfile.TemporaryDirectory() as tmp:

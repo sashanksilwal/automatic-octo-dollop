@@ -47,6 +47,13 @@ summary={'trial_kind':'one continuous physical walking pilot','scenario':'walkin
  'Inference throughput uses the received-frame cohort; final work can finish just after the window.',
  'Local latency excludes glasses capture, phone/network transit and physical browser display.',
  'No ground-truth gaze accuracy is inferred from detected heads or model scores.']}
+# Deferred USB export means absent RTT probes were not successful probes.
+summary['rtt_probe_policy']=m.get('rtt_probe_policy','See raw manifest')
+observations=a.pilot/'operator-observations.json'
+if observations.exists():
+    summary['operator_observations']=json.loads(observations.read_text())
+    summary['limitations'].append(summary['operator_observations']['scope'])
+
 # Each device keeps its own clock. Source identity joins never subtract clocks.
 if (a.pilot/'glasses.csv').exists() and (a.pilot/'phone.csv').exists():
     roles={}

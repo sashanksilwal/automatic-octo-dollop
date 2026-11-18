@@ -1,0 +1,18 @@
+{
+  "frames": 500,
+  "unique_frames": 500,
+  "labeled_people": 1197,
+  "predicted_heads_including_unannotated": 1336,
+  "cohort_order_matches_frozen_selection": true,
+  "summary_recomputed_from_scored_labels": true,
+  "confusion_counts": {
+    "missed_inside": 85,
+    "true_inside": 658,
+    "missed_outside": 11,
+    "false_inside": 222,
+    "false_outside": 34,
+    "true_outside": 187
+  },
+  "predictions.jsonl_sha256": "2131956e7350021995de326ce95ffdf7b44b273f985ef80f3b91c755cdf1f236",
+  "scored-labels.jsonl_sha256": "dd37bcdead7b9baa6fd820914e4e243951a20ab40c16c32085869dc09b87b2b4"
+}

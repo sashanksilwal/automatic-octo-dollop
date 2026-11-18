@@ -120,6 +120,23 @@ def analyze_run(folder, stall_s=.5):
     if len(phone)>1:
         times=[int(r['local_mono_ns']) for r in phone.values()]
         result['phone_payload_mbps_matched_interval']=sum(int(r['jpeg_bytes']) for r in phone.values())*8/((max(times)-min(times))/1e9)/1e6
+    if manifest.get('topology'):
+        uploaded=frames(folder/'phone-uploader.csv',source,'frame_uploaded')
+        bridge=frames(folder/'bridge.csv',source)
+        result['topology']=manifest['topology']
+        result['transport_limits']=manifest.get('transport_limits')
+        result['phone_frames_missing_at_bridge_in_matched_interval']=len(relayed-set(bridge))
+        result['bridge_frames_missing_at_laptop_in_matched_interval']=len({s for s in bridge if lo<=s<=hi}-received)
+        # Each subtraction below stays on one physical device and clock domain.
+        result['phone_receive_to_wss_write_return_ms']=distribution(
+            (int(r['local_mono_ns'])-int(phone[s]['local_mono_ns']))/1e6
+            for s,r in uploaded.items() if s in phone)
+        result['laptop_bridge_to_viewer_receive_ms']=distribution(
+            (int(r['local_mono_ns'])-int(bridge[s]['local_mono_ns']))/1e6
+            for s,r in laptop.items() if s in bridge)
+        result['limitations']+=['Cellular condition includes hotspot WLAN, Internet and Cloudflare proxy overhead.',
+            '5G indicator was operator-observed; no continuous iPhone modem telemetry.',
+            'A WSS write return is not a remote receipt acknowledgment or one-way network latency.']
     return result
 
 
@@ -150,8 +167,10 @@ def main():
              'actual_receive_fps_pooled':sum(r['laptop_received_frames'] for r in runs)/duration if duration else None,
              'per_run_inference_fps':distribution(r['actual_inference_fps'] for r in runs),
              'per_run_pipeline_p95_ms':distribution(r['pipeline_ms']['p95'] for r in runs),
-             'full_part_c_validated':False,'pending':['5G trials','multiple field scenarios','more than one hour total','cross-device/display latency if required','in-class demo'],
+             'full_part_c_validated':False,'pending':['remaining required scenario/run coverage','more than one hour total across eligible field batches','ground-truth gaze evaluation','cross-device/display latency','in-class demo'],
              'runs':runs}
+    if batch.get('topology'):summary['topology']=batch['topology']
+    if batch['network']=='PAL3.0':summary['pending'].insert(0,'cellular trials (not represented by this batch)')
     (args.output/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
     print(json.dumps({k:v for k,v in summary.items() if k!='runs'},indent=2))
 
