@@ -10,6 +10,7 @@ from urllib.parse import parse_qs
 
 ROOT=Path(__file__).resolve().parents[2]
 ADB=ROOT/'.tools/android-sdk/platform-tools/adb'
+SERIAL=globals().get('SERIAL','YM00DEC8P06371')
 PORT=8765
 ORIGIN=f'http://127.0.0.1:{PORT}'
 NONCE=secrets.token_urlsafe(32)
@@ -55,7 +56,7 @@ class Handler(BaseHTTPRequestHandler):
             if not username or not password or any(c in username+password for c in '\r\n\x00'):
                 self.reply(400,{'status':'Enter a username and password without line breaks.'}); return
             USED=True
-            result=subprocess.run([str(ADB),'-s','YM00DEC8P06371','shell','CLASSPATH=/data/local/tmp/cs536-pal-setup.dex app_process / PalConnect'],
+            result=subprocess.run([str(ADB),'-s',SERIAL,'shell','CLASSPATH=/data/local/tmp/cs536-pal-setup.dex app_process / PalConnect'],
                                   input=(username+'\n'+password+'\n').encode(),capture_output=True,timeout=40)
             username=password=None
             output=result.stdout.decode(errors='replace')
@@ -69,7 +70,7 @@ class Handler(BaseHTTPRequestHandler):
         finally:
             data.clear()
             if USED:
-                subprocess.run([str(ADB),'-s','YM00DEC8P06371','shell','rm','-f','/data/local/tmp/cs536-pal-setup.dex'],capture_output=True,timeout=5)
+                subprocess.run([str(ADB),'-s',SERIAL,'shell','rm','-f','/data/local/tmp/cs536-pal-setup.dex'],capture_output=True,timeout=5)
                 threading.Thread(target=self.server.shutdown,daemon=True).start()
 
 server=HTTPServer(('127.0.0.1',PORT),Handler)
@@ -81,4 +82,4 @@ try: server.serve_forever(poll_interval=.2)
 finally:
     expiry.cancel()
     server.server_close()
-    subprocess.run([str(ADB),'-s','YM00DEC8P06371','shell','rm','-f','/data/local/tmp/cs536-pal-setup.dex'],capture_output=True,timeout=5)
+    subprocess.run([str(ADB),'-s',SERIAL,'shell','rm','-f','/data/local/tmp/cs536-pal-setup.dex'],capture_output=True,timeout=5)

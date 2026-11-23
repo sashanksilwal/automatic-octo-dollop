@@ -1,187 +1,119 @@
-# CS536 Smart Glass - Parts A–E progress
+# CS536 Smart Glasses: gaze estimation
 
-November 18 update: Parts A and B operate on real glasses-to-phone-to-laptop input, with all inference local to the laptop. Baseline evaluation totals 66 measured minutes: 12 stationary PAL3.0 runs (24 minutes), 16 stationary cellular-hotspot runs (32 minutes), and 20 thirty-second walking tests from two five-minute PAL3.0 sessions (10 minutes). Walking tests retain session grouping and interruptions. The cellular route includes hotspot Wi-Fi, cellular uplink, Internet and Cloudflare; the operator observed a 5G indicator. Actual cellular receive/inference rates are 7.27/7.09 fps. A fixed 500-frame labeled public-data evaluation and the existing three-sample stopwatch measurement are complete. Four separate 120-second Part D runs provide two counterbalanced pacing pairs; scene/head workloads and WAN conditions limit causal claims. The report and slides remain local drafts, and the class talk and live demonstration remain pending.
+Glasses camera → Android phone relay → laptop head detection and gaze estimation → annotated laptop viewer. **All inference runs locally on the laptop.** The phone receives and relays video.
 
-**November 4 historical update:** live AIR2 → Android phone → laptop streaming and laptop-only MTGS inference work on PAL3.0. The physical walking recording and operator-selected screenshots are under local `output/report-assets/2026-11-04-live/`. Prospective stationary trials and reproducible analysis are in [`Bonus-PartC/`](Bonus-PartC/README.md). Part C remains partial: 5G, additional scenarios and more than one hour total are still required. An optional steady capture pacing setting for Part D has two preliminary physical checks: capture/receive rates approached 8 fps and inference reached 7.60 fps, versus 7.27 fps baseline. Extra traffic and higher local receive-to-result p95 are recorded as tradeoffs. The report and presentation are progress drafts, with unperformed evaluation clearly identified. See [`docs/PART_B.md`](docs/PART_B.md).
-
-**October 22 historical Part B update:** the laptop-only MTGS gaze-target prototype accepts downloaded videos or the unchanged phone relay, with heatmaps, target arrows, in/out estimates and inference controls. The viewer now offers **224/448 model-input selection**. With head-count warm-up, 224/FP32 and 448/FP16 both exceeded 8 fps offline on the classroom test; native 448/FP32 remains the reference. Downloaded-video and simulated relay validation are complete; live glasses validation and accuracy evaluation are pending. See [`docs/PART_B.md`](docs/PART_B.md) for timing, prediction tradeoffs, setup and switching to the live stream. The Part A instructions below remain applicable.
-
-Part A implementation: **glasses camera -> Android receiver/relay -> laptop viewer**.
-
-The Android source builds into two debug APKs. The physical INMO AIR2 -> Pixel 5 -> laptop path is verified over 5 GHz Wi-Fi on an iPhone hotspot, without USB video forwarding.
-
-The **BONUS-PartA submission** includes a 128.352-second continuous hardware run at 7.479 fps, successful pause/resume, relay stop/restart, Wi-Fi reconnection and authentication checks, and verified 90-second phone and laptop recordings. Both builds, Android lint, seven Java tests and ten Python/integration tests passed. See [`docs/VALIDATION.md`](docs/VALIDATION.md) for measured evidence and remaining optional checks. The required in-class demonstration is still pending; Part B gaze estimation is not included.
-
-The local submission archive is `output/Bonus-PartA.zip`: source, both APKs, both demo clips, checksums and submission instructions. Camera recordings remain outside Git; GitHub contains the source and evidence summaries. The `BONUS-PartA` tag identifies this submission version.
-
-## What is implemented
-
-- **Glasses app:** camera permission flow, Camera1 capture, selectable camera ID, rotation, JPEG quality and frame rate; start/pause/resume/stop; pairing code; local addresses and trace location.
-- **Phone app:** receives and displays the glasses stream, relays the original JPEG frames to the laptop, reconnects after interruptions, clears stale previews, and provides pause/resume/stop.
-- **Laptop viewer:** live picture, received frames, receive rate, JPEG goodput, frame age, fullscreen, and CSV traces. Python 3.10+; no pip packages required.
-- **Transport:** authenticated HTTP MJPEG, preserved frame identity and source timestamps, bounded frame/header sizes, one latest-frame slot per hop, limited viewer connections, read timeouts and stalled-client cleanup.
-- **Development tools:** generated animated camera fixtures, a simulated three-device demo, Java/Python interoperability tests, and an endurance test.
-
-This baseline carries video only. Both Android apps must remain in the foreground; they keep the display awake and stop capture/relay when backgrounded. There is no audio requirement in the Part A handout.
-
-## Try it now without hardware
-
-From this directory:
+## Clone and prerequisites
 
 ```sh
-python3 tools/demo.py
+git clone https://github.com/sashanksilwal/automatic-octo-dollop.git
+cd automatic-octo-dollop
 ```
 
-Open **http://127.0.0.1:8000**. The moving test pattern should appear, with approximately 8 received frames per second. Ctrl+C stops all simulated components. This demo simulates the glasses and phone in Python; `tools/check.sh` separately exercises the real shared Java relay used by the phone app.
+Use Python 3.12 for gaze inference, `uv`, `git`, `curl`, and `shasum`. Building Android apps also requires JDK 17, Android SDK platform 35 and build-tools 35.0.0. The checked-in Gradle wrapper selects Gradle 8.11.1. On a fresh machine, install these prerequisites and set `JAVA_HOME` and `ANDROID_HOME`. On the development laptop, scripts discover the ignored `.tools/` installations automatically. Initial dependency and model setup requires Internet access and several GB of free space; complete it before class.
 
-## Build the Android apps
+Apple MPS is the measured inference backend (Apple M5, 24 GiB RAM). `--device cpu` is available on other machines, but its speed has not been validated at 8 fps.
 
-Prerequisites: **JDK 17**, **Android SDK platform 35**, **build-tools 35.0.0**. The project uses Android Gradle Plugin 8.9.2 and the checked-in Gradle 8.11.1 wrapper with its distribution checksum. Both apps support Android API 23+ at the software level; actual device support must be checked.
+## Part B: run without glasses
 
-On this Mac, project-local build dependencies are already under ignored `.tools/`. The scripts find them automatically. On another machine, install the prerequisites through Android Studio or Android command-line tools, then set `JAVA_HOME` and `ANDROID_HOME`, or set `sdk.dir` in untracked `local.properties` for the SDK.
+From the cloned repository root:
 
 ```sh
-./tools/build.sh
+sh tools/setup_gaze.sh
+.tools/gaze-env/bin/python laptop-viewer/gaze_viewer.py \
+  --video output/part-b/inputs/classroom.mp4 --loop \
+  --scene-size 224 --device auto
 ```
 
-Outputs:
+Wait for model loading and head-count warm-up, then open **http://127.0.0.1:8000/** and select **Start inference**. Use Pause/Resume, Stop and Apply settings to control inference. Scene input is selectable between **224 × 224 and 448 × 448 pixels**; this is distinct from camera stream resolution. The worker retains the newest frame and drops old work if processing falls behind. A missing or stale stream clears the overlay.
 
-```text
-output/apk/cs536-glasses-debug.apk
-output/apk/cs536-phone-debug.apk
-```
-
-You can also open this directory in Android Studio and select `glasses-app` or `android-app`. Android Studio may use its bundled JDK if compatible with the pinned build tools. The first Gradle run on a fresh machine needs internet access for build dependencies.
-
-## Install on the physical devices
-
-Enable developer access and USB debugging using the instructions for the actual glasses model. Enable USB debugging on the Android phone. Use `adb devices` to obtain each device's serial number, then substitute it below:
+For an annotated video, per-frame predictions and timing:
 
 ```sh
-adb -s GLASSES_SERIAL install -r output/apk/cs536-glasses-debug.apk
-adb -s PHONE_SERIAL install -r output/apk/cs536-phone-debug.apk
+.tools/gaze-env/bin/python laptop-viewer/gaze_video.py \
+  --video output/part-b/inputs/classroom.mp4 \
+  --output output/part-b/classroom-check --fps 8 \
+  --scene-size 224 --device auto --warm-all-head-counts \
+  --source-url https://raw.githubusercontent.com/yakhyo/gaze-estimation/main/assets/in_video.mp4
 ```
 
-On this Mac, the project-local `adb` is `.tools/android-sdk/platform-tools/adb` if it is not already on `PATH`.
+Choose a new output directory for each run. Encoded output is 8 fps; actual processing throughput and latency are reported separately. See [Part B configuration and sources](docs/PART_B.md) for exact settings, input/model pins and result interpretation.
 
-## Run the actual three-device stream
+## Part B: run with glasses and the phone relay
 
-1. Connect glasses and phone to a network on which they can reach each other. A controlled Wi-Fi router or a phone hotspot is a useful first check. Do not assume PAL3.0 permits direct client-to-client traffic.
-2. On the glasses, open **CS536 Glasses**. Grant camera permission. Start with camera ID **0**, **8 fps**, quality **65**, rotation **0**, and port **8080**. Select **Start camera stream**.
-3. Note the glasses' displayed IPv4 address and pairing code. Multiple addresses may be listed; choose the interface reachable from the phone.
-4. On the phone, open **CS536 Receiver**. Enter the glasses base address, such as `http://192.168.1.20:8080`, and the glasses pairing code. Leave the phone relay port at **8081**. Select **Connect and relay**.
-5. Confirm the picture appears on the phone. Note the phone's address and its separate pairing code.
-6. On the laptop, run:
+1. Enable USB debugging on both devices and approve the laptop. Obtain their current serials with `adb devices`; do not assume the loaner kit has the development unit's serial.
+2. Build the Android apps:
+
+   ```sh
+   sh tools/build.sh
+   ```
+
+   This writes `output/apk/cs536-glasses-debug.apk` and `output/apk/cs536-phone-debug.apk`.
+3. Install using the serials from step 1:
+
+   ```sh
+   adb -s GLASSES_SERIAL install -r output/apk/cs536-glasses-debug.apk
+   adb -s PHONE_SERIAL install -r output/apk/cs536-phone-debug.apk
+   ```
+
+   Both apps support API 23+. The real tests used AIR2 Android 9 glasses and an Android 14 relay phone. For isolated installations alongside the original Part A app, build with `./gradlew -Pcs536ApplicationIdSuffix=.partb :glasses-app:assembleDebug :android-app:assembleDebug` and install the resulting APKs from each module's `build/outputs/apk/debug/` directory.
+4. Join a network where the glasses, phone and laptop can reach each other. For PAL3.0 certificate-aware setup, follow [the saved checklist](docs/PAL3_DEMO.md). Network addresses may change after reconnecting.
+5. Open **CS536 Glasses**, grant camera permission, select camera 0, 640 × 480 pixels, 8 fps, JPEG quality 65 and rotation 0. Select **Start camera stream**. Keep the glasses capture app visible.
+6. Open **CS536 Receiver**, allow notifications, enter `http://CURRENT_GLASSES_IP:8080` and the glasses' displayed pairing code. Select **Connect and relay**. Check moving phone video and note the phone's separate pairing code.
+7. Start the laptop viewer against the **phone** address:
+
+   ```sh
+   .tools/gaze-env/bin/python laptop-viewer/gaze_viewer.py \
+     --source http://CURRENT_PHONE_IP:8081 --scene-size 224 --device auto
+   ```
+
+   Enter the phone pairing code when prompted. Open **http://127.0.0.1:8000/** and select **Start inference**. Both file and live input use the same inference pipeline.
+
+The updated phone relay continues through app switching and screen lock after connection. Stop it from the app or running notification. Swiping the phone app out of Recents intentionally stops the relay. The glasses capture app still needs to remain visible. See [stability validation](docs/STREAMING_STABILITY.md). USB was used for setup, power and logs, not video, in the physical field trials.
+
+For the original video-only laptop viewer, use `python3 laptop-viewer/viewer.py --source http://CURRENT_PHONE_IP:8081`. Part A functionality remains available independently.
+
+## Checks
 
 ```sh
-python3 laptop-viewer/viewer.py --source http://PHONE_IP:8081
+sh tools/check.sh
+.tools/gaze-env/bin/python -m unittest discover -s tests -v
+python3 -m unittest discover -s Bonus-PartC -p 'test_*.py' -v
 ```
 
-Enter the **phone's** pairing code when prompted, then open **http://127.0.0.1:8000**. Using the glasses address here would bypass the phone; use the phone relay for the Part A demonstration.
+`check.sh` builds both apps, runs Android lint and Java tests, compiles the shared Java relay harness, and runs Python regressions. Without Android/JDK tooling, `python3 -m unittest discover -s tests -v` runs the standard-library tests; optional ML and unbuilt Java interop tests are skipped. Run the gaze-environment command above for the ML control/scoring tests. Hardware checks and downloaded-video benchmarks are separate evidence.
 
-Open the viewer through that HTTP address. Opening `laptop-viewer/index.html` directly as a file cannot connect its relative `/frame` and `/status` requests to the Python server. The dashboard uses a simple black-and-white layout; the camera image retains its original colors.
+## Part C: evaluation and results
 
-7. Stream for more than one minute. The proposed acceptance run is 90 seconds followed by pause/resume and disconnect/reconnect checks. Follow `docs/HARDWARE_CHECKLIST.md` before calling Part A complete.
+- [Field collection, verification, analysis and plotting](Bonus-PartC/README.md)
+- [Cellular-hotspot/Cloudflare route and reproduction](Bonus-PartC/CELLULAR_TESTS.md)
+- [Labeled public-data accuracy protocol](docs/GAZE_ACCURACY.md)
+- [Existing screen-to-screen latency evidence](Bonus-PartC/LATENCY_TEST.md)
 
-The stream addresses use ordinary HTTP on a controlled LAN or USB-forwarded link. Pairing codes prevent unauthenticated access but do not encrypt traffic. This version does not provide an internet-facing relay, NAT traversal, or TLS termination. PAL3.0/5G field routing is a later topology task and must not be inferred from a local hotspot test.
+Baseline field evidence totals **66 measured minutes**: 12 stationary PAL3.0 runs (24 minutes), 16 stationary cellular-hotspot runs (32 minutes), and 20 non-overlapping thirty-second walking tests from two five-minute PAL3.0 sessions (10 minutes). Session grouping and interruptions are retained. The cellular route includes hotspot Wi-Fi, cellular uplink, Internet and Cloudflare; the 5G indicator is operator-observed. It is not an isolated 5G-radio benchmark. Actual cellular receive/inference throughput is 7.27/7.09 fps.
 
-## Reliable phone-to-laptop debugging over USB
+The fixed 500-frame public test subset provides accuracy scores; it does not label the glasses footage. Three stopwatch samples provide preliminary display delay, not a calibrated latency distribution. Derived results are in `results/`; raw traces are retained locally for inspection on request.
 
-Keep the glasses-to-phone connection as above. Connect the phone to the laptop by USB:
+## Part D: capture pacing
 
-```sh
-adb -s PHONE_SERIAL forward tcp:18081 tcp:8081
-python3 laptop-viewer/viewer.py --source http://127.0.0.1:18081
-```
+[Implementation and initial evaluation](Bonus-PartD/README.md), [comparison protocol](Bonus-PartD/MATCHED_PROTOCOL.md), and [completed comparison results](results/part-d/5g-matched-side-2pairs-2026-11-18/README.md). Four separate 120-second runs form two counterbalanced pairs. Absolute scheduling improves capture pacing; changing head workloads and WAN conditions limit causal interpretation of receive/inference and latency differences.
 
-Enter the phone pairing code. This still shows video received and relayed by the phone. Remove the mapping after use:
+## Submission and demo
 
-```sh
-adb -s PHONE_SERIAL forward --remove tcp:18081
-```
+The public repository URL is the code submission for **November 30, 2026**. The final report and slides are due on Gradescope **December 4**; five-minute presentations with a mandatory Part B demo take place **December 7 and 9**. The class demonstration is still pending. Complete laptop/projector and shared-kit setup rehearsals before class. Current report, slides, recordings, SDKs, model files and credentials remain outside Git.
 
-## Develop with an emulator or a substitute phone camera
+The intended five-minute sequence is: explain the Part B goal and demo (30 seconds), demonstrate actual glasses input and runtime controls (two minutes), summarize C/D results and limitations (two minutes), and allow 30 seconds for transitions. Preload the model before receiving the shared kit; practice installing, joining Wi-Fi and connecting the fresh device addresses within three minutes. Detailed demo setup: [PAL3 checklist](docs/PAL3_DEMO.md).
 
-To test the receiver against the simulated glasses:
-
-```sh
-python3 tools/simulate.py --port 8080
-```
-
-In a standard Android emulator, use source `http://10.0.2.2:8080` and pairing code `demo536`. Install the receiver APK in the emulator. Use adb forwarding from emulator port 8081 to laptop port 18081 to test its actual Android relay with the laptop viewer.
-
-For a physical receiver phone, expose the simulator only on the controlled test network:
-
-```sh
-python3 tools/simulate.py --bind 0.0.0.0 --port 8080
-```
-
-Use the laptop's LAN address on the phone. `CS536_PAIRING_CODE` overrides the simulator's development code. The camera APK can also be installed on another Android phone as a temporary glasses substitute; adjust camera ID and rotation as needed. These modes are development aids, not evidence of INMO hardware compatibility.
-
-## Logs and measurements
-
-Android apps show their trace path on screen. Traces are under the app's external-files directory, usually:
-
-```text
-/sdcard/Android/data/edu.purdue.cs536.glasses/files/traces/
-/sdcard/Android/data/edu.purdue.cs536.phone/files/traces/
-```
-
-For example:
-
-```sh
-mkdir -p data/raw/glasses data/raw/phone
-adb -s GLASSES_SERIAL pull /sdcard/Android/data/edu.purdue.cs536.glasses/files/traces/ data/raw/glasses/
-adb -s PHONE_SERIAL pull /sdcard/Android/data/edu.purdue.cs536.phone/files/traces/ data/raw/phone/
-```
-
-If the vendor firmware prevents pulling external app files, use the debug APK's `run-as` access or Android Studio Device Explorer and verify the exported files. The laptop writes timestamped CSVs under `data/raw/` by default; `--log-dir` changes that location. Raw traces are excluded from Git and need a separate backup.
-
-Each record includes the local event time, source session/frame ID, source capture-callback times, JPEG size/dimensions, and event details. Frame bytes and pairing codes are not logged. There is a new source session on every camera start/resume. The phone forwards source metadata and JPEG bytes unchanged.
-
-Interpretation matters:
-
-- Source capture time is the time of the Android preview callback, **not** a calibrated sensor-exposure timestamp.
-- A `frame_sent` event records completion of the application write, not a remote receipt acknowledgment.
-- `frame_displayed` on the phone records installing a decoded bitmap for rendering, not a measured physical display refresh.
-- Laptop frame age uses its own monotonic clock. JPEG goodput counts received JPEG payload bytes, not IP/TCP overhead or link capacity.
-- Cross-device monotonic clocks cannot be directly subtracted. Calibrate offsets or use an externally filmed timer before reporting one-way or glass-to-display latency.
-
-The initial frame rate, resolution, and JPEG quality are configurable baseline choices. MJPEG is simple to inspect but uses more bandwidth than inter-frame video codecs. Rotation of nonzero angles currently adds a bitmap rotation/recompression step on the glasses; measure its cost on hardware.
-
-## Verification
-
-```sh
-./tools/check.sh
-python3 tools/soak_test.py --duration 65
-```
-
-`check.sh` builds both APKs, runs Android lint and Java unit/socket tests, compiles a JVM relay harness from the same transport used by the apps, and runs Python tests including Java/Python interoperability. The endurance test runs a generated source through that Java relay into the Python receiver and writes `output/verification/soak-result.json` plus a CSV trace. Its output is explicitly marked as simulated.
-
-For Python-only checks without Android/JDK tooling:
-
-```sh
-python3 -m unittest discover -s tests -v
-```
-
-The Java interoperability test is skipped if its compiled harness is unavailable. Do not treat that skip as Android verification.
-
-Checked-in evidence summaries are in [`docs/evidence/`](docs/evidence/). Raw device traces, camera screenshots, generated APKs, and local SDK/build caches stay outside Git. Build the APKs with `tools/build.sh`; consult [`docs/HARDWARE_CHECKLIST.md`](docs/HARDWARE_CHECKLIST.md) for the remaining physical checks.
-
-## Code map
+## Source map
 
 | Directory | Role |
 | --- | --- |
-| `glasses-app/` | Camera capture and glasses control screen |
-| `android-app/` | Phone receiver, preview, and relay control screen |
-| `android-common/` | Native UI helpers, bitmap preview, and trace-file creation |
-| `stream-core/` | Shared Java protocol, server/client, frame store, and CSV logger |
-| `laptop-viewer/` | Python upstream receiver, local browser viewer, and matching protocol |
-| `tools/` | Demo source, build/check scripts, and endurance test |
-| `tests/` | Python and cross-language tests |
-| `docs/` | Protocol and physical-device acceptance procedure |
-
-See `PROJECT_PLAN.md` for the larger A-E plan. This implementation covers Part A; it does not implement Part B AI or claim Part C/D results.
+| `glasses-app/` | Glasses capture and runtime controls |
+| `android-app/` | Phone preview, foreground relay service and controls |
+| `android-common/`, `stream-core/` | Shared UI and transport |
+| `laptop-viewer/` | Raw viewer, gaze engine, bounded worker and offline runner |
+| `Bonus-PartC/`, `Bonus-PartD/` | Field evaluation and pacing comparison |
+| `tools/`, `tests/` | Setup, fixtures and regression checks |
+| `results/`, `docs/` | Derived results, protocols and measured evidence |
 
 ## Technical references
 
@@ -189,7 +121,3 @@ See `PROJECT_PLAN.md` for the larger A-E plan. This implementation covers Part A
 - [INMO developer portal](https://developer.inmolens.com/): confirm AIR3 setup and firmware-specific behavior when selecting hardware.
 - [Android Camera1 guide](https://developer.android.com/media/camera/camera-deprecated/camera-api): preview callbacks, buffers, permissions, and camera release. Camera1 is deprecated; it is isolated in `CameraCapture` because the AIR2 documentation explicitly recommends that interface. AIR3 may require adapting this class.
 - [AGP 8.9 compatibility](https://developer.android.com/build/releases/agp-8-9-0-release-notes): pinned build-tool requirements.
-
-## PAL3.0 demo reconnect
-
-Use the saved [PAL3.0 demo checklist](docs/PAL3_DEMO.md). `python3 tools/connect_pal3.py` restores the certificate-aware glasses connection using the saved login. If credentials need refreshing, `--refresh-login` opens a laptop-only form. Public certificate fingerprints are pinned, server-domain verification remains enabled, and credentials stay outside Git.

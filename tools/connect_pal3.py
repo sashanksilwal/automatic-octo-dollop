@@ -32,7 +32,9 @@ def prepare():
     return dex/'classes.dex',bundle
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--refresh-login',action='store_true',help='Open a laptop-only credential form if saved authentication fails');p.add_argument('--prepare-only',action='store_true',help='Validate certificates and compile helpers without touching devices');a=p.parse_args()
+    global SERIAL
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--serial',default=SERIAL,help='Glasses serial from adb devices');p.add_argument('--refresh-login',action='store_true',help='Open a laptop-only credential form if saved authentication fails');p.add_argument('--prepare-only',action='store_true',help='Validate certificates and compile helpers without touching devices');a=p.parse_args()
+    SERIAL=a.serial
     if not a.prepare_only and not a.refresh_login and connected():show_ip();return
     dex,bundle=prepare()
     if a.prepare_only:print('Certificate pins verified and helper compiled. No device changes.');return
@@ -40,7 +42,7 @@ def main():
     if a.refresh_login:
         # Credentials flow directly from localhost to the glasses via stdin.
         import runpy
-        runpy.run_path(str(SOURCE/'local_form.py'),run_name='__main__');return
+        runpy.run_path(str(SOURCE/'local_form.py'),run_name='__main__',init_globals={'SERIAL':SERIAL});return
     result=shell('CLASSPATH=/data/local/tmp/cs536-pal-setup.dex app_process / PalCertificateFix',input=bundle.read_bytes(),capture_output=True,timeout=55)
     print(result.stdout.decode(errors='replace'),flush=True)
     if connected():show_ip()

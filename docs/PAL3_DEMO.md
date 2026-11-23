@@ -68,6 +68,16 @@ The first launcher checks the current SSIDs, discovers both IP addresses, reinst
 
 These convenience launchers are stored locally under ignored `.tools/`; use the manual instructions below on a fresh checkout. Both devices subsequently rejoined PAL3.0, and the updated receiver passed the 121-second live background/lock check documented below. The phone launcher now uses the fixed APK under `output/apk/demo-stability/`. If another team changes our application IDs, signatures or debugging authorization, address that before starting the demo; the helper does not uninstall unrelated apps or bypass authorization.
 
+## Shared-kit classroom setup
+
+Final course instructions allow five minutes for the full presentation/demo, with setup during the previous team. Preload the laptop model and prepare APKs before class. Practice installation, Wi-Fi login and relay connection within three minutes using the actual kit; this timing has not yet been validated. Test the laptop with the classroom projector by December 4.
+
+```sh
+python3 tools/connect_pal3.py --serial GLASSES_SERIAL --refresh-login
+```
+
+Use the manual steps below for a changed loaner kit. The local convenience launcher is tied to the development devices and is not a general shared-kit installer.
+
 ## Before the demo
 
 1. Charge the glasses and keep a power bank available. Connect the glasses and phone to the laptop by USB for setup. Unlock the phone and accept USB debugging if asked.
@@ -130,4 +140,4 @@ This command uses the existing project Android SDK (`android-35`, build-tools `3
 python3 tools/connect_pal3.py --prepare-only
 ```
 
-The AIR2 serial is the current project unit (`YM00DEC8P06371`). Update the wrapper and local form together if borrowing another unit. Source helpers and public certificates can be versioned; generated DEX files stay under ignored `.tools/pal3-demo-cache/`. Pairing codes and account credentials remain outside the repository.
+The default AIR2 serial is the development unit (`YM00DEC8P06371`). For either shared classroom kit, get its actual serial with `adb devices` and pass `--serial GLASSES_SERIAL`, including with `--refresh-login`. The same serial is passed to the credential form. Source helpers and public certificates can be versioned; generated DEX files stay under ignored `.tools/pal3-demo-cache/`. Pairing codes and account credentials remain outside the repository.
